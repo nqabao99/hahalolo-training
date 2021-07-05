@@ -1,23 +1,31 @@
 import React from "react";
 
-function QuestionItems({ data, handleGetAnswerChange, id }) {
-    return (
-        <div className="body-question__items">
-            <h3 className="name">{data.name}</h3>
-            <p className="content">{data.content}</p>
-            {data.answer.map((i) => (
-                <div className="answer" key={i.id_answer}>
-                    <label htmlFor={i.id_answer}>{i.content_answer}</label>
-                    <input
-                        onChange={() => handleGetAnswerChange(i, id)}
-                        id={i.id_answer}
-                        name={data.name}
-                        type="radio"
-                    />
-                </div>
-            ))}
+function QuestionItems({
+  dataQuestion,
+  handleGetAnswerChange,
+  selectQuestion,
+}) {
+  const activeQuestion = selectQuestion.map((e) => e.answer_id);
+
+  return (
+    <div className="body-question__items">
+      <h3 className="name">{dataQuestion.name}</h3>
+      <p className="content">{dataQuestion.content}</p>
+      {dataQuestion.answers.map((i) => (
+        <div className="answer" key={i.answer_id}>
+          <label htmlFor={i.answer_id}>{i.content_answer}</label>
+
+          <input
+            onChange={() => handleGetAnswerChange(i)}
+            id={i.answer_id}
+            name={i.parent_id}
+            type="radio"
+            defaultChecked={activeQuestion.includes(i.answer_id)}
+          />
         </div>
-    );
+      ))}
+    </div>
+  );
 }
 
 export default QuestionItems;
