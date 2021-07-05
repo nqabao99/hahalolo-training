@@ -37,6 +37,7 @@ function Index() {
     e.preventDefault();
     setOpenModal(true);
   };
+
   const closeResultModalClick = () => {
     setOpenModal(false);
   };
@@ -46,7 +47,9 @@ function Index() {
   };
 
   const nextQuestion = () => {
-    if (count < selectQuestion.length) setCount(count + 1);
+    if (count < dataQuestion.length - 1) {
+      setCount(count + 1);
+    }
   };
 
   return (

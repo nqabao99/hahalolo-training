@@ -5,8 +5,7 @@ function QuestionItems({
   handleGetAnswerChange,
   selectQuestion,
 }) {
-  const activeQuestion = selectQuestion.map((e) => e.answer_id);
-
+  const activeAnswer = selectQuestion.map((e) => e.answer_id);
   return (
     <div className="body-question__items">
       <h3 className="name">{dataQuestion.name}</h3>
@@ -20,7 +19,7 @@ function QuestionItems({
             id={i.answer_id}
             name={i.parent_id}
             type="radio"
-            defaultChecked={activeQuestion.includes(i.answer_id)}
+            defaultChecked={activeAnswer.includes(i.answer_id)}
           />
         </div>
       ))}
