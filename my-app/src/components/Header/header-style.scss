@@ -1,0 +1,59 @@
+.header {
+    height: 75px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &-navmenu {
+        &__list {
+            margin-left: -50px;
+            li {
+                display: inline-block;
+                padding: 0 15px;
+                &:hover a::after {
+                    width: 100%;
+                    background: #3a4bcd;
+                }
+                a {
+                    font-size: 12px;
+                    text-transform: uppercase;
+                    color: #0c0c0c;
+                    &::after {
+                        content: "";
+                        display: block;
+                        height: 4px;
+                        width: 0;
+                        margin-top: 3px;
+
+                        transition: width 0.3s;
+                    }
+                }
+            }
+        }
+    }
+
+    &-login {
+        a {
+            background-color: #b2deff;
+
+            display: inline-block;
+            height: 40px;
+            padding-left: 20px;
+            padding-right: 5px;
+            border-radius: 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            span {
+                font-size: 13px;
+                font-weight: 700;
+                color: #065592;
+                margin-right: 10px;
+            }
+            i {
+                color: #065592;
+                font-size: 35px;
+            }
+        }
+    }
+}

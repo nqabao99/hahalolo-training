@@ -1,0 +1,16 @@
+.container {
+    max-width: 1111px;
+    margin: auto;
+}
+body {
+    font-family: "Nunito", sans-serif !important;
+    font-weight: 400;
+}
+* {
+    scroll-behavior: smooth;
+}
+
+.home-page {
+    position: relative;
+    min-height: 150vh;
+}
