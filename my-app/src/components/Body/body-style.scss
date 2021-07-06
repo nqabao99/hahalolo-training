@@ -88,21 +88,51 @@
   border-radius: 8px;
   &-question {
     // height: 50px;
-
+    &__left {
+      p,
+      label {
+        color: #fff;
+        display: inline;
+        margin-right: 10px;
+        font-size: 18px;
+      }
+    }
     display: flex;
     justify-content: space-between;
     align-items: center;
-    p,
+
     i {
       color: #fff;
-    }
-    i {
       font-size: 40px;
       &:first-child {
         margin-right: 15px;
       }
       &:last-child {
         margin-left: 25px;
+      }
+    }
+  }
+
+  #select {
+    background-color: rgb(157, 213, 251);
+  }
+
+  .checked {
+    background-color: rgb(255, 222, 183) !important;
+  }
+
+  .list-question {
+    li {
+      display: inline-block;
+      padding: 7px 20px;
+      margin: 5px;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.3s;
+      &:hover {
+        background: #ffb83c;
+        color: #fff;
       }
     }
   }

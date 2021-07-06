@@ -6,13 +6,12 @@ import QuestionItems from "./QuestionItems";
 
 import Button from "../../../common/Button/index";
 import ResultModal from "./ResultModal/ResultModal";
-import ListQuestion from "./ListQuestion/index";
+import ControllerQuestion from "./ControlleQuestion/index";
 
 function Index({ dataQuestion }) {
   const [selectQuestion, setSelectQuestion] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [count, setCount] = useState(0);
-  const [openListQuestion, setOpenListQuestion] = useState(false);
 
   const handleGetAnswerChange = (data) => {
     if (selectQuestion.length > 0) {
@@ -27,6 +26,12 @@ function Index({ dataQuestion }) {
       }
     } else {
       setSelectQuestion([...selectQuestion, data]);
+    }
+
+    if (count < dataQuestion.length - 1) {
+      setTimeout(() => {
+        setCount(count + 1);
+      }, 300);
     }
   };
 
@@ -49,10 +54,6 @@ function Index({ dataQuestion }) {
     }
   };
 
-  const handleListQuestionClick = () => {
-    setOpenListQuestion(!openListQuestion);
-  };
-
   const handleSelectQuestionClick = (index) => {
     setCount(index);
   };
@@ -60,7 +61,6 @@ function Index({ dataQuestion }) {
   return (
     <div className="body-question">
       <DetailQuestion />
-
       <div className="body-question__list">
         <form className="body-question__form" onSubmit={handleQuestionSubmit}>
           {dataQuestion.map(
@@ -75,29 +75,15 @@ function Index({ dataQuestion }) {
               )
           )}
 
-          <div className="controlle">
-            <div className="controlle-question">
-              <div>
-                <p>20:00</p>
-              </div>
-              <div>
-                <i className="fa fa-caret-left" onClick={prevQuestion}></i>
-                <i className="fa fa-caret-right" onClick={nextQuestion}></i>
-                <i
-                  className="fa fa-ellipsis-h"
-                  onClick={handleListQuestionClick}
-                ></i>
-              </div>
-            </div>
+          <ControllerQuestion
+            prevQuestion={prevQuestion}
+            nextQuestion={nextQuestion}
+            dataQuestion={dataQuestion}
+            selectQuestion={selectQuestion}
+            handleSelectQuestionClick={handleSelectQuestionClick}
+            count={count}
+          />
 
-            {openListQuestion && (
-              <ListQuestion
-                dataQuestion={dataQuestion}
-                selectQuestion={selectQuestion}
-                handleSelectQuestionClick={handleSelectQuestionClick}
-              />
-            )}
-          </div>
           <Button text="Nộp bài" />
         </form>
 

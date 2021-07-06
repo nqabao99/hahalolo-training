@@ -5,6 +5,8 @@ function ResultModal({ closeResultModalClick, selectQuestion, dataQuestion }) {
   const arrd = [];
   const arrs = [];
   selectQuestion.map((i) => (i.result ? arrd.push(i) : arrs.push(i)));
+  const scores =
+    Math.round(arrd.length * (10 / dataQuestion.length) * 100) / 100;
 
   return (
     <>
@@ -14,7 +16,8 @@ function ResultModal({ closeResultModalClick, selectQuestion, dataQuestion }) {
           <h1 className="modal-header">KẾT QUẢ</h1>
           <div className="modal-body">
             <div className="modal-body__title">
-              {/* <p>Thời gian: {seconds_to(600 - timer)}</p> */}
+              <p>Thời gian: 12:00</p>
+              <p>Điểm số: {scores}</p>
               <p>Số câu đúng: {arrd.length}</p>
               <p>Số câu Sai: {arrs.length}</p>
             </div>
