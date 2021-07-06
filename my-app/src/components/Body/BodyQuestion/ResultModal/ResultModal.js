@@ -1,7 +1,12 @@
 import React from "react";
 import "./result-modal.scss";
 
-function ResultModal({ closeResultModalClick, selectQuestion, dataQuestion }) {
+function ResultModal({
+  timer,
+  closeResultModalClick,
+  selectQuestion,
+  dataQuestion,
+}) {
   const arrd = [];
   const arrs = [];
   selectQuestion.map((i) => (i.result ? arrd.push(i) : arrs.push(i)));
@@ -16,7 +21,7 @@ function ResultModal({ closeResultModalClick, selectQuestion, dataQuestion }) {
           <h1 className="modal-header">KẾT QUẢ</h1>
           <div className="modal-body">
             <div className="modal-body__title">
-              <p>Thời gian: 12:00</p>
+              <p>Thời gian: {600 - timer}</p>
               <p>Điểm số: {scores}</p>
               <p>Số câu đúng: {arrd.length}</p>
               <p>Số câu Sai: {arrs.length}</p>
@@ -26,7 +31,11 @@ function ResultModal({ closeResultModalClick, selectQuestion, dataQuestion }) {
               <div className="modal-body__table-result">
                 {selectQuestion.map((item) => (
                   <span key={item.answer_id}>
-                    {`${item.parent_id.slice(-1)} - 
+                    {`${
+                      item.parent_id.length > 10
+                        ? item.parent_id.slice(-2)
+                        : item.parent_id.slice(-1)
+                    } - 
                     ${item.content_answer.slice(0, 1)}`}
                   </span>
                 ))}
@@ -35,11 +44,11 @@ function ResultModal({ closeResultModalClick, selectQuestion, dataQuestion }) {
             <div className="modal-body__table">
               <h2>Đáp án đúng</h2>
               <div className="modal-body__table-result">
-                {dataQuestion.map((item) => (
+                {dataQuestion.map((item, index) => (
                   <span key={item.id}>
                     {item.answers.map((i) =>
                       i.result
-                        ? `${i.parent_id.slice(-1)} - 
+                        ? `${index + 1} - 
                         ${i.content_answer.slice(0, 1)}`
                         : null
                     )}

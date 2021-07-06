@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Oclock from "../../../../common/Oclock";
 
 function Index({
   prevQuestion,
@@ -7,6 +8,9 @@ function Index({
   selectQuestion,
   handleSelectQuestionClick,
   count,
+  stopTime,
+  formatTime,
+  getTimerOclock,
 }) {
   const [openListQuestion, setOpenListQuestion] = useState(false);
 
@@ -31,7 +35,11 @@ function Index({
     <div className="controlle">
       <div className="controlle-question">
         <div className="controlle-question__left">
-          <p>20:00</p>
+          <Oclock
+            getTimeDown={getTimerOclock}
+            stop={stopTime}
+            formatTime={formatTime}
+          />
           {dataQuestion.map(
             (item, index) =>
               index === count && (
@@ -48,9 +56,31 @@ function Index({
           )}
         </div>
         <div>
-          <i className="fa fa-caret-left" onClick={prevQuestion}></i>
-          <i className="fa fa-caret-right" onClick={nextQuestion}></i>
-          <i className="fa fa-ellipsis-h" onClick={handleListQuestionClick}></i>
+          <button
+            disabled={count === 0 ? true : false}
+            type="button"
+            className="btn-next"
+            onClick={prevQuestion}
+          >
+            <i className="fa fa-caret-left"></i>
+          </button>
+
+          <button
+            disabled={count < dataQuestion.length - 1 ? false : true}
+            type="button"
+            className="btn-next"
+            onClick={nextQuestion}
+          >
+            <i className="fa fa-caret-right"></i>
+          </button>
+
+          <button
+            type="button"
+            className="btn-next"
+            onClick={handleListQuestionClick}
+          >
+            <i className="fa fa-ellipsis-h"></i>
+          </button>
         </div>
       </div>
 
@@ -63,7 +93,7 @@ function Index({
               key={item.id}
               onClick={() => handleSelectQuestionClick(index)}
             >
-              {item.name.slice(-1)}
+              {index + 1}
             </li>
           ))}
         </ul>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./body-style.scss";
-import BodyQuesiton from "./BodyQuestion/index";
-import RatingsTable from "./RatingsTable/index";
+import BodyQuesiton from "./BodyQuestion/BodyQuestion";
+import RatingsTable from "./RatingsTable/RatingsTable";
 
 function Index() {
   const [dataQuestion, setDataQuestion] = useState([]);
