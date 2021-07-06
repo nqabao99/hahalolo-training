@@ -7,6 +7,7 @@ import QuestionItems from "./QuestionItems";
 import Button from "../../../common/Button/index";
 import ResultModal from "./ResultModal/ResultModal";
 import ControllerQuestion from "./ControlleQuestion/ControlleQuestion";
+import Warning from "./Warning/Warning";
 
 function Index({ dataQuestion }) {
   const [selectQuestion, setSelectQuestion] = useState([]);
@@ -14,6 +15,8 @@ function Index({ dataQuestion }) {
   const [count, setCount] = useState(0);
   const [stopTime, setStopTime] = useState(false);
   const [timer, setTimer] = useState(0);
+  const [timerNow, setTimeNow] = useState(0);
+  const [warning, setWarning] = useState(false);
 
   const handleGetAnswerChange = (data) => {
     if (selectQuestion.length > 0) {
@@ -39,8 +42,23 @@ function Index({ dataQuestion }) {
 
   const handleQuestionSubmit = (e) => {
     e.preventDefault();
+
+    if (selectQuestion.length < 10) {
+      setWarning(true);
+    } else {
+      setOpenModal(true);
+      setStopTime(true);
+    }
+  };
+
+  const handleWarningBoxSubmit = () => {
     setOpenModal(true);
     setStopTime(true);
+    setWarning(false);
+  };
+
+  const handleCloseWarning = () => {
+    setWarning(false);
   };
 
   const closeResultModalClick = () => {
@@ -76,6 +94,10 @@ function Index({ dataQuestion }) {
     setTimer(data);
   };
 
+  const getTimeNow = (data) => {
+    setTimeNow(data);
+  };
+
   return (
     <div className="body-question">
       <DetailQuestion />
@@ -103,10 +125,22 @@ function Index({ dataQuestion }) {
             stopTime={stopTime}
             formatTime={formatTime}
             getTimerOclock={getTimerOclock}
+            getTimeNow={getTimeNow}
           />
 
           <Button type="submit" text="Nộp bài" />
         </form>
+
+        {warning && (
+          <Warning
+            handleCloseWarning={handleCloseWarning}
+            handleWarningBoxSubmit={handleWarningBoxSubmit}
+            selectQuestion={selectQuestion}
+            dataQuestion={dataQuestion}
+            timerNow={timerNow}
+            formatTime={formatTime}
+          />
+        )}
 
         {openModal && (
           <ResultModal
@@ -114,6 +148,7 @@ function Index({ dataQuestion }) {
             selectQuestion={selectQuestion}
             dataQuestion={dataQuestion}
             timer={timer}
+            formatTime={formatTime}
           />
         )}
       </div>

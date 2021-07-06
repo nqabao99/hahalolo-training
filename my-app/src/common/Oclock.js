@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-export default function Oclock({ stop, getTimeDown, formatTime }) {
+export default function Oclock({ stop, getTimeDown, formatTime, getTimeNow }) {
   const [timeDown, setTimeDown] = useState(600);
 
   useEffect(() => {
@@ -11,6 +11,8 @@ export default function Oclock({ stop, getTimeDown, formatTime }) {
     if (stop) {
       clearInterval(timeInterval);
       getTimeDown(timeDown);
+    } else {
+      getTimeNow(timeDown);
     }
 
     return () => {

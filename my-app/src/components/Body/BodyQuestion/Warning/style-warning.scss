@@ -1,0 +1,52 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+  background-color: rgba($color: #000000, $alpha: 0.3);
+}
+.notify {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+
+  border-radius: 5px;
+  width: 400px;
+  padding: 20px;
+  text-align: center;
+  h1 {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  p {
+    font-size: 16px;
+    font-weight: 400;
+    margin: 10px 0;
+  }
+  .buttons {
+    padding: 20px 0 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    button {
+      width: 150px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+    }
+    & button:last-child {
+      background-color: #1f31b4;
+      color: #fff;
+    }
+  }
+}

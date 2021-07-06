@@ -11,6 +11,7 @@ function Index({
   stopTime,
   formatTime,
   getTimerOclock,
+  getTimeNow,
 }) {
   const [openListQuestion, setOpenListQuestion] = useState(false);
 
@@ -39,6 +40,7 @@ function Index({
             getTimeDown={getTimerOclock}
             stop={stopTime}
             formatTime={formatTime}
+            getTimeNow={getTimeNow}
           />
           {dataQuestion.map(
             (item, index) =>

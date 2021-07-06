@@ -6,6 +6,7 @@ function ResultModal({
   closeResultModalClick,
   selectQuestion,
   dataQuestion,
+  formatTime,
 }) {
   const arrd = [];
   const arrs = [];
@@ -21,7 +22,7 @@ function ResultModal({
           <h1 className="modal-header">KẾT QUẢ</h1>
           <div className="modal-body">
             <div className="modal-body__title">
-              <p>Thời gian: {600 - timer}</p>
+              <p>Thời gian: {formatTime(600 - timer)}</p>
               <p>Điểm số: {scores}</p>
               <p>Số câu đúng: {arrd.length}</p>
               <p>Số câu Sai: {arrs.length}</p>
