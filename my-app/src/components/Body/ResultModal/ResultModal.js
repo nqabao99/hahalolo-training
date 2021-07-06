@@ -21,7 +21,7 @@ function ResultModal({ closeResultModalClick, selectQuestion, dataQuestion }) {
             <div className="modal-body__table">
               <h2>Đáp án của bạn</h2>
               <div className="modal-body__table-result">
-                {selectQuestion.map((item, index) => (
+                {selectQuestion.map((item) => (
                   <span key={item.answer_id}>
                     {`${item.parent_id.slice(-1)} - 
                     ${item.content_answer.slice(0, 1)}`}

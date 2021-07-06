@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "./body-style.scss";
 import QuestionItems from "./QuestionItems";
-import RatingsTable from "./RatingsTable";
+import RatingsTable from "./RatingsTable/index";
 import Button from "../../common/Button/index";
 import ResultModal from "./ResultModal/ResultModal";
+import ListQuestion from "./ListQuestion/index";
 
 function Index() {
   const [dataQuestion, setDataQuestion] = useState([]);
   const [selectQuestion, setSelectQuestion] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [count, setCount] = useState(0);
+  const [openListQuestion, setOpenListQuestion] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost:3000/question")
@@ -52,6 +54,14 @@ function Index() {
     }
   };
 
+  const handleListQuestionClick = () => {
+    setOpenListQuestion(!openListQuestion);
+  };
+
+  const handleSelectQuestionClick = (index) => {
+    setCount(index);
+  };
+
   return (
     <main className="body">
       <div className="container">
@@ -90,14 +100,34 @@ function Index() {
                     )
                 )}
 
-                <div className="controle-question">
-                  <div>
-                    <p>20:00</p>
+                <div className="controlle">
+                  <div className="controlle-question">
+                    <div>
+                      <p>20:00</p>
+                    </div>
+                    <div>
+                      <i
+                        className="fa fa-caret-left"
+                        onClick={prevQuestion}
+                      ></i>
+                      <i
+                        className="fa fa-caret-right"
+                        onClick={nextQuestion}
+                      ></i>
+                      <i
+                        className="fa fa-ellipsis-h"
+                        onClick={handleListQuestionClick}
+                      ></i>
+                    </div>
                   </div>
-                  <div>
-                    <i className="fa fa-caret-left" onClick={prevQuestion}></i>
-                    <i className="fa fa-caret-right" onClick={nextQuestion}></i>
-                  </div>
+
+                  {openListQuestion && (
+                    <ListQuestion
+                      dataQuestion={dataQuestion}
+                      selectQuestion={selectQuestion}
+                      handleSelectQuestionClick={handleSelectQuestionClick}
+                    />
+                  )}
                 </div>
                 <Button text="Nộp bài" />
               </form>
@@ -110,6 +140,7 @@ function Index() {
               )}
             </div>
           </div>
+
           <RatingsTable />
         </div>
       </div>
