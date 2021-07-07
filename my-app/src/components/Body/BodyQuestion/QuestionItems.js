@@ -1,20 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
+import Input from "../../../common/Input";
 
-function QuestionItems({
-  dataQuestion,
-  handleGetAnswerChange,
-  selectQuestion,
-}) {
-  const activeAnswer = selectQuestion.map((e) => e.answer_id);
+import { contextBodyQuestion } from "./BodyQuestion";
+
+function QuestionItems({ itemQuestion, handleGetAnswerChange }) {
+  const context = useContext(contextBodyQuestion);
+
+  const activeAnswer = context.selectQuestion.map((e) => e.answer_id);
   return (
     <div className="body-question__items">
-      <h3 className="name">{dataQuestion.name}</h3>
-      <p className="content">{dataQuestion.content}</p>
-      {dataQuestion.answers.map((i) => (
+      <h3 className="name">{itemQuestion.name}</h3>
+      <p className="content">{itemQuestion.content}</p>
+      {itemQuestion.answers.map((i) => (
         <div className="answer" key={i.answer_id}>
           <label htmlFor={i.answer_id}>{i.content_answer}</label>
 
-          <input
+          <Input
             onChange={() => handleGetAnswerChange(i)}
             id={i.answer_id}
             name={i.parent_id}

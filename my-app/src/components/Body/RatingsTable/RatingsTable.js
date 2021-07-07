@@ -21,7 +21,7 @@ function RatingsTable() {
           <RatingsTableItems name="Hiệu Hải Đăng" scores="7" time="19:30" />
           <RatingsTableItems name="Hiệu Hải Đăng" scores="7" time="19:30" />
         </div>
-        <Button className="body-ratings__btn" text="Nộp bài" />
+        <Button className="btn body-ratings__btn" text="Nộp bài" />
       </div>
     </div>
   );

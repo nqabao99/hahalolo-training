@@ -1,29 +1,30 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./style-warning.scss";
-function Warning({
-  handleCloseWarning,
-  handleWarningBoxSubmit,
-  selectQuestion,
-  dataQuestion,
-  timerNow,
-  formatTime,
-}) {
+import Button from "../../../../common/Button/index";
+import { contextBodyQuestion } from "../BodyQuestion";
+function Warning({ handleCloseWarning, handleWarningBoxSubmit, timerNow }) {
+  const context = useContext(contextBodyQuestion);
   return (
     <>
       <div className="overlay" onClick={handleCloseWarning}></div>
       <div className="notify">
         <h1>
-          Bạn còn {dataQuestion.length - selectQuestion.length} câu chưa trả lời
+          Bạn còn {context.dataQuestion.length - context.selectQuestion.length}{" "}
+          câu chưa trả lời
         </h1>
-        <p>Thời gian còn {formatTime(timerNow)}</p>
+        <p>Thời gian còn {context.formatTime(timerNow)}</p>
         <p>Bạn đồng ý nộp bài chư ?</p>
         <div className="buttons">
-          <button type="button" onClick={handleWarningBoxSubmit}>
-            Nộp bài
-          </button>
-          <button type="button" onClick={handleCloseWarning}>
-            Làm tiếp
-          </button>
+          <Button
+            type="button"
+            onClick={handleWarningBoxSubmit}
+            text="Nộp bài"
+          ></Button>
+          <Button
+            type="button"
+            onClick={handleCloseWarning}
+            text="Làm tiếp"
+          ></Button>
         </div>
       </div>
     </>

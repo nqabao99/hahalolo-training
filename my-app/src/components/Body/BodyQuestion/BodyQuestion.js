@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
 
 import DetailQuestion from "./DetailQuestion";
 
@@ -9,7 +9,17 @@ import ResultModal from "./ResultModal/ResultModal";
 import ControllerQuestion from "./ControlleQuestion/ControlleQuestion";
 import Warning from "./Warning/Warning";
 
-function Index({ dataQuestion }) {
+export const contextBodyQuestion = createContext();
+
+function Index() {
+  const [dataQuestion, setDataQuestion] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/question")
+      .then((response) => response.json())
+      .then((result) => setDataQuestion(result));
+  }, []);
+
   const [selectQuestion, setSelectQuestion] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [count, setCount] = useState(0);
@@ -66,12 +76,12 @@ function Index({ dataQuestion }) {
   };
 
   const prevQuestion = () => {
-    if (count > 0) setCount(count - 1);
+    if (count > 0) setCount((count) => count - 1);
   };
 
   const nextQuestion = () => {
     if (count < dataQuestion.length - 1) {
-      setCount(count + 1);
+      setCount((count) => count + 1);
     }
   };
 
@@ -96,62 +106,66 @@ function Index({ dataQuestion }) {
 
   const getTimeNow = (data) => {
     setTimeNow(data);
+    if (data === 0) {
+      setOpenModal(true);
+      setStopTime(true);
+      setWarning(false);
+    }
+  };
+
+  let listContext = {
+    dataQuestion: dataQuestion,
+    selectQuestion: selectQuestion,
+    count: count,
+    formatTime: formatTime,
   };
 
   return (
     <div className="body-question">
       <DetailQuestion />
-      <div className="body-question__list">
-        <form className="body-question__form" onSubmit={handleQuestionSubmit}>
-          {dataQuestion.map(
-            (item, index) =>
-              index === count && (
-                <QuestionItems
-                  selectQuestion={selectQuestion}
-                  handleGetAnswerChange={handleGetAnswerChange}
-                  key={item.id}
-                  dataQuestion={item}
-                />
-              )
+
+      <contextBodyQuestion.Provider value={listContext}>
+        <div className="body-question__list">
+          <form className="body-question__form" onSubmit={handleQuestionSubmit}>
+            {dataQuestion.map(
+              (item, index) =>
+                index === count && (
+                  <QuestionItems
+                    handleGetAnswerChange={handleGetAnswerChange}
+                    key={item.id}
+                    itemQuestion={item}
+                  />
+                )
+            )}
+
+            <ControllerQuestion
+              prevQuestion={prevQuestion}
+              nextQuestion={nextQuestion}
+              handleSelectQuestionClick={handleSelectQuestionClick}
+              stopTime={stopTime}
+              getTimerOclock={getTimerOclock}
+              getTimeNow={getTimeNow}
+            />
+
+            <Button className="btn" type="submit" text="Nộp bài" />
+          </form>
+
+          {warning && (
+            <Warning
+              handleCloseWarning={handleCloseWarning}
+              handleWarningBoxSubmit={handleWarningBoxSubmit}
+              timerNow={timerNow}
+            />
           )}
 
-          <ControllerQuestion
-            prevQuestion={prevQuestion}
-            nextQuestion={nextQuestion}
-            dataQuestion={dataQuestion}
-            selectQuestion={selectQuestion}
-            handleSelectQuestionClick={handleSelectQuestionClick}
-            count={count}
-            stopTime={stopTime}
-            formatTime={formatTime}
-            getTimerOclock={getTimerOclock}
-            getTimeNow={getTimeNow}
-          />
-
-          <Button type="submit" text="Nộp bài" />
-        </form>
-
-        {warning && (
-          <Warning
-            handleCloseWarning={handleCloseWarning}
-            handleWarningBoxSubmit={handleWarningBoxSubmit}
-            selectQuestion={selectQuestion}
-            dataQuestion={dataQuestion}
-            timerNow={timerNow}
-            formatTime={formatTime}
-          />
-        )}
-
-        {openModal && (
-          <ResultModal
-            closeResultModalClick={closeResultModalClick}
-            selectQuestion={selectQuestion}
-            dataQuestion={dataQuestion}
-            timer={timer}
-            formatTime={formatTime}
-          />
-        )}
-      </div>
+          {openModal && (
+            <ResultModal
+              closeResultModalClick={closeResultModalClick}
+              timer={timer}
+            />
+          )}
+        </div>
+      </contextBodyQuestion.Provider>
     </div>
   );
 }

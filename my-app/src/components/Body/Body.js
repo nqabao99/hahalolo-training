@@ -4,19 +4,11 @@ import BodyQuesiton from "./BodyQuestion/BodyQuestion";
 import RatingsTable from "./RatingsTable/RatingsTable";
 
 function Index() {
-  const [dataQuestion, setDataQuestion] = useState([]);
-
-  useEffect(() => {
-    fetch("http://localhost:3000/question")
-      .then((response) => response.json())
-      .then((result) => setDataQuestion(result));
-  }, []);
-
   return (
     <main className="body">
       <div className="container">
         <div className="body-container">
-          <BodyQuesiton dataQuestion={dataQuestion} />
+          <BodyQuesiton />
 
           <RatingsTable />
         </div>

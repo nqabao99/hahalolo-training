@@ -1,18 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Oclock from "../../../../common/Oclock";
+import { contextBodyQuestion } from "../BodyQuestion";
+import Button from "../../../../common/Button/index";
+import Input from "../../../../common/Input";
 
 function Index({
   prevQuestion,
   nextQuestion,
-  dataQuestion,
-  selectQuestion,
   handleSelectQuestionClick,
-  count,
   stopTime,
-  formatTime,
   getTimerOclock,
   getTimeNow,
 }) {
+  const context = useContext(contextBodyQuestion);
+
   const [openListQuestion, setOpenListQuestion] = useState(false);
 
   const [selectChecked, setSelectChecked] = useState([]);
@@ -31,7 +32,7 @@ function Index({
     }
   }
 
-  const activeQuestion = selectQuestion.map((e) => e.parent_id);
+  const activeQuestion = context.selectQuestion.map((e) => e.parent_id);
   return (
     <div className="controlle">
       <div className="controlle-question">
@@ -39,14 +40,14 @@ function Index({
           <Oclock
             getTimeDown={getTimerOclock}
             stop={stopTime}
-            formatTime={formatTime}
+            formatTime={context.formatTime}
             getTimeNow={getTimeNow}
           />
-          {dataQuestion.map(
+          {context.dataQuestion.map(
             (item, index) =>
-              index === count && (
+              index === context.count && (
                 <label htmlFor={item.id} key={`input${item.id}`}>
-                  <input
+                  <Input
                     id={item.id}
                     type="checkbox"
                     defaultChecked={selectChecked.includes(item.id)}
@@ -58,37 +59,36 @@ function Index({
           )}
         </div>
         <div>
-          <button
-            disabled={count === 0 ? true : false}
+          <Button
+            disabled={context.count === 0 ? true : false}
             type="button"
             className="btn-next"
             onClick={prevQuestion}
-          >
-            <i className="fa fa-caret-left"></i>
-          </button>
+            icon="fa fa-caret-left"
+          ></Button>
 
-          <button
-            disabled={count < dataQuestion.length - 1 ? false : true}
+          <Button
+            disabled={
+              context.count < context.dataQuestion.length - 1 ? false : true
+            }
             type="button"
             className="btn-next"
             onClick={nextQuestion}
-          >
-            <i className="fa fa-caret-right"></i>
-          </button>
+            icon="fa fa-caret-right"
+          ></Button>
 
-          <button
+          <Button
             type="button"
             className="btn-next"
             onClick={handleListQuestionClick}
-          >
-            <i className="fa fa-ellipsis-h"></i>
-          </button>
+            icon="fa fa-ellipsis-h"
+          ></Button>
         </div>
       </div>
 
       {openListQuestion && (
         <ul className="list-question">
-          {dataQuestion.map((item, index) => (
+          {context.dataQuestion.map((item, index) => (
             <li
               id={activeQuestion.includes(item.id) ? "select" : null}
               className={selectChecked.includes(item.id) ? "checked" : null}

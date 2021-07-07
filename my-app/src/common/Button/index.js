@@ -1,10 +1,16 @@
 import React from "react";
 import "./style-button.scss";
 
-function index({ className, text, type, onClick }) {
+function index({ className, text, type, onClick, disabled, icon }) {
   return (
-    <button onClick={onClick} type={type} className={`btn ${className}`}>
+    <button
+      disabled={disabled}
+      onClick={onClick}
+      type={type}
+      className={className}
+    >
       {text}
+      {icon && <i className={icon}></i>}
     </button>
   );
 }

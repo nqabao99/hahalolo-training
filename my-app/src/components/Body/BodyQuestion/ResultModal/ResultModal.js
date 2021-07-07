@@ -1,18 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./result-modal.scss";
+import { contextBodyQuestion } from "../BodyQuestion";
 
-function ResultModal({
-  timer,
-  closeResultModalClick,
-  selectQuestion,
-  dataQuestion,
-  formatTime,
-}) {
+function ResultModal({ timer, closeResultModalClick }) {
+  const context = useContext(contextBodyQuestion);
   const arrd = [];
   const arrs = [];
-  selectQuestion.map((i) => (i.result ? arrd.push(i) : arrs.push(i)));
+  context.selectQuestion.map((i) => (i.result ? arrd.push(i) : arrs.push(i)));
   const scores =
-    Math.round(arrd.length * (10 / dataQuestion.length) * 100) / 100;
+    Math.round(arrd.length * (10 / context.dataQuestion.length) * 100) / 100;
 
   return (
     <>
@@ -22,7 +18,7 @@ function ResultModal({
           <h1 className="modal-header">KẾT QUẢ</h1>
           <div className="modal-body">
             <div className="modal-body__title">
-              <p>Thời gian: {formatTime(600 - timer)}</p>
+              <p>Thời gian: {context.formatTime(600 - timer)}</p>
               <p>Điểm số: {scores}</p>
               <p>Số câu đúng: {arrd.length}</p>
               <p>Số câu Sai: {arrs.length}</p>
@@ -30,7 +26,7 @@ function ResultModal({
             <div className="modal-body__table">
               <h2>Đáp án của bạn</h2>
               <div className="modal-body__table-result">
-                {selectQuestion.map((item) => (
+                {context.selectQuestion.map((item) => (
                   <span key={item.answer_id}>
                     {`${
                       item.parent_id.length > 10
@@ -45,7 +41,7 @@ function ResultModal({
             <div className="modal-body__table">
               <h2>Đáp án đúng</h2>
               <div className="modal-body__table-result">
-                {dataQuestion.map((item, index) => (
+                {context.dataQuestion.map((item, index) => (
                   <span key={item.id}>
                     {item.answers.map((i) =>
                       i.result
