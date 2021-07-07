@@ -9,15 +9,28 @@ import ResultModal from "./ResultModal/ResultModal";
 import ControllerQuestion from "./ControlleQuestion/ControlleQuestion";
 import Warning from "./Warning/Warning";
 
+import Spinner from "./Loading/Loading";
+
 export const contextBodyQuestion = createContext();
 
 function Index({ handleEndClick }) {
   const [dataQuestion, setDataQuestion] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const sleep = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  };
 
   useEffect(() => {
-    fetch("http://localhost:3000/question")
-      .then((response) => response.json())
-      .then((result) => setDataQuestion(result));
+    const fetchQuestion = async () => {
+      setIsLoading(true);
+      await sleep(1500);
+      const responseJson = await fetch("http://localhost:3000/question");
+      const response = await responseJson.json();
+      setDataQuestion(response);
+      setIsLoading(false);
+    };
+    fetchQuestion();
   }, []);
 
   const [selectQuestion, setSelectQuestion] = useState([]);
@@ -121,54 +134,65 @@ function Index({ handleEndClick }) {
     formatTime: formatTime,
   };
 
-  return (
-    <div className="body-question">
-      <DetailQuestion />
+  if (isLoading) {
+    return (
+      <div className="body-question">
+        <Spinner />
+      </div>
+    );
+  } else {
+    return (
+      <div className="body-question">
+        <DetailQuestion />
 
-      <contextBodyQuestion.Provider value={listContext}>
-        <div className="body-question__list">
-          <form className="body-question__form" onSubmit={handleQuestionSubmit}>
-            {dataQuestion.map(
-              (item, index) =>
-                index === count && (
-                  <QuestionItems
-                    handleGetAnswerChange={handleGetAnswerChange}
-                    key={item.id}
-                    itemQuestion={item}
-                  />
-                )
+        <contextBodyQuestion.Provider value={listContext}>
+          <div className="body-question__list">
+            <form
+              className="body-question__form"
+              onSubmit={handleQuestionSubmit}
+            >
+              {dataQuestion.map(
+                (item, index) =>
+                  index === count && (
+                    <QuestionItems
+                      handleGetAnswerChange={handleGetAnswerChange}
+                      key={item.id}
+                      itemQuestion={item}
+                    />
+                  )
+              )}
+
+              <ControllerQuestion
+                prevQuestion={prevQuestion}
+                nextQuestion={nextQuestion}
+                handleSelectQuestionClick={handleSelectQuestionClick}
+                stopTime={stopTime}
+                getTimerOclock={getTimerOclock}
+                getTimeNow={getTimeNow}
+              />
+
+              <Button className="btn" type="submit" text="Nộp bài" />
+            </form>
+
+            {warning && (
+              <Warning
+                handleCloseWarning={handleCloseWarning}
+                handleWarningBoxSubmit={handleWarningBoxSubmit}
+                timerNow={timerNow}
+              />
             )}
 
-            <ControllerQuestion
-              prevQuestion={prevQuestion}
-              nextQuestion={nextQuestion}
-              handleSelectQuestionClick={handleSelectQuestionClick}
-              stopTime={stopTime}
-              getTimerOclock={getTimerOclock}
-              getTimeNow={getTimeNow}
-            />
-
-            <Button className="btn" type="submit" text="Nộp bài" />
-          </form>
-
-          {warning && (
-            <Warning
-              handleCloseWarning={handleCloseWarning}
-              handleWarningBoxSubmit={handleWarningBoxSubmit}
-              timerNow={timerNow}
-            />
-          )}
-
-          {openModal && (
-            <ResultModal
-              closeResultModalClick={closeResultModalClick}
-              timer={timer}
-            />
-          )}
-        </div>
-      </contextBodyQuestion.Provider>
-    </div>
-  );
+            {openModal && (
+              <ResultModal
+                closeResultModalClick={closeResultModalClick}
+                timer={timer}
+              />
+            )}
+          </div>
+        </contextBodyQuestion.Provider>
+      </div>
+    );
+  }
 }
 
 export default Index;
