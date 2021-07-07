@@ -11,7 +11,7 @@ import Warning from "./Warning/Warning";
 
 export const contextBodyQuestion = createContext();
 
-function Index() {
+function Index({ handleEndClick }) {
   const [dataQuestion, setDataQuestion] = useState([]);
 
   useEffect(() => {
@@ -73,6 +73,7 @@ function Index() {
 
   const closeResultModalClick = () => {
     setOpenModal(false);
+    handleEndClick(true);
   };
 
   const prevQuestion = () => {

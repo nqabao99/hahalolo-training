@@ -13,7 +13,7 @@ function ResultModal({ timer, closeResultModalClick }) {
   return (
     <>
       <div className="modal">
-        <div className="overlay" onClick={closeResultModalClick}></div>
+        <div className="overlay"></div>
         <div className="modal-result">
           <h1 className="modal-header">KẾT QUẢ</h1>
           <div className="modal-body">
