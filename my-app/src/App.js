@@ -4,7 +4,7 @@ import Footer from "./components/Footer/index";
 import Body from "./components/Body/Body";
 import Login from "./components/Form/Login";
 import Register from "./components/Form/Register";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { useState, useEffect, createContext } from "react";
 
 export const contextApp = createContext();
@@ -21,9 +21,10 @@ function App() {
       const response = await responseJson.json();
       setListAccount(response);
     };
-
     fetchAccount();
   }, [reset]);
+
+  const user = JSON.parse(localStorage.getItem("user-info"));
 
   const listContext = {
     listAccount: listAccount,
@@ -36,8 +37,20 @@ function App() {
         <Header />
         <Switch>
           <Route path="/" exact component={Body} />
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
+          <Route
+            path="/login"
+            render={() => {
+              return !user ? <Login /> : <Redirect to="/" />;
+            }}
+            // component={Login}
+          />
+          <Route
+            path="/register"
+            render={() => {
+              return !user ? <Register /> : <Redirect to="/" />;
+            }}
+            // component={Register}
+          />
         </Switch>
         <Footer />
       </div>
