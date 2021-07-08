@@ -1,14 +1,21 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import "./body-style.scss";
 import BodyQuesiton from "./BodyQuestion/BodyQuestion";
-import RatingsTable from "./RatingsTable/RatingsTable";
 import ChooseTopic from "./BodyQuestion/ChooseTopic/ChooseTopic";
+import RatingsTable from "./RatingsTable/RatingsTable";
 
 function Index() {
+  const history = useHistory();
+  const user = JSON.parse(localStorage.getItem("user-info"));
   const [start, setStart] = useState(true);
 
   const handleStartClick = () => {
-    setStart(false);
+    if (user) {
+      setStart(false);
+    } else {
+      history.push("/login");
+    }
   };
   const handleEndClick = (data) => {
     setStart(data);
