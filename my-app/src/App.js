@@ -27,22 +27,17 @@ function App() {
 
   const listContext = {
     listAccount: listAccount,
+    handleReset: handleReset,
   };
 
   return (
     <contextApp.Provider value={listContext}>
       <div className="home-page">
-        <Header handleReset={handleReset} />
+        <Header />
         <Switch>
           <Route path="/" exact component={Body} />
-          <Route
-            path="/login"
-            render={(props) => <Login handleReset={handleReset} />}
-          />
-          <Route
-            path="/register"
-            render={(props) => <Register handleReset={handleReset} />}
-          />
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
         </Switch>
         <Footer />
       </div>

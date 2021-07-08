@@ -5,9 +5,9 @@ import { contextApp } from "../../App";
 import Input from "../../common/Input";
 import "./login-style.scss";
 
-function Login({ handleReset }) {
+function Login() {
   let history = useHistory();
-  const listAccount = useContext(contextApp).listAccount;
+  const context = useContext(contextApp);
 
   const {
     register,
@@ -15,15 +15,15 @@ function Login({ handleReset }) {
     formState: { errors },
   } = useForm();
   const onHandleSubmit = (data) => {
-    if (listAccount) {
-      let check = listAccount.find(
+    if (context.listAccount) {
+      let check = context.listAccount.find(
         (item) =>
           item.account === data.account && item.password === data.password
       );
 
       if (check) {
         localStorage.setItem("user-info", JSON.stringify(check));
-        handleReset("login");
+        context.handleReset("login");
         history.push("/");
       } else {
         alert("Sai ten tai khoan hoac mat khau");

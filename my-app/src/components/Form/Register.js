@@ -5,11 +5,11 @@ import Input from "../../common/Input";
 import "./login-style.scss";
 import { useHistory } from "react-router-dom";
 
-function Register({ handleReset }) {
+function Register() {
   let history = useHistory();
   const [message, setMessage] = useState(false);
 
-  const listAccount = useContext(contextApp).listAccount;
+  const context = useContext(contextApp);
 
   const {
     register,
@@ -21,7 +21,9 @@ function Register({ handleReset }) {
     let ramdomID = Math.random().toString(36).substring(7);
     data.id = ramdomID;
 
-    const check = listAccount.some((item) => item.account === data.account);
+    const check = context.listAccount.some(
+      (item) => item.account === data.account
+    );
     if (!check) {
       e.target.reset();
       setMessage(false);
@@ -36,7 +38,7 @@ function Register({ handleReset }) {
       });
       result = await result.json();
       localStorage.setItem("user-info", JSON.stringify(result));
-      handleReset("register");
+      context.handleReset("register");
       history.push("/");
     } else {
       setMessage(true);
