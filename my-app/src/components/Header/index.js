@@ -1,10 +1,17 @@
 import React from "react";
-import "./header-style.scss";
 import { Link } from "react-router-dom";
-import Image from "../../common/Image";
 import logo from "../../assets/img/logo.png";
+import Image from "../../common/Image";
+import "./header-style.scss";
 
-function Header() {
+function Header({ handleReset }) {
+  const user = JSON.parse(localStorage.getItem("user-info"));
+
+  const handleLogoutClick = () => {
+    handleReset("logout");
+    localStorage.removeItem("user-info");
+  };
+
   return (
     <header>
       <div className="container">
@@ -40,10 +47,15 @@ function Header() {
             </ul>
           </div>
           <div className="header-login">
-            <Link to="/login">
-              <span>Đăng nhập</span>
+            <Link to={user ? "" : "/login"}>
+              <span>{user ? user.lastName : "Đăng nhập"}</span>
               <i className="fa fa-user-circle"></i>
             </Link>
+            {user && (
+              <div className="logout" onClick={handleLogoutClick}>
+                <p>Đăng xuất</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

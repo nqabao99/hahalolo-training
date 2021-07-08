@@ -1,17 +1,34 @@
-import React from "react";
-import "./login-style.scss";
-import Input from "../../common/Input";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { contextApp } from "../../App";
+import Input from "../../common/Input";
+import "./login-style.scss";
 
-function Login() {
+function Login({ handleReset }) {
+  let history = useHistory();
+  const listAccount = useContext(contextApp).listAccount;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const onHandleSubmit = (data) => {
-    console.log(data);
+    if (listAccount) {
+      let check = listAccount.find(
+        (item) =>
+          item.account === data.account && item.password === data.password
+      );
+
+      if (check) {
+        localStorage.setItem("user-info", JSON.stringify(check));
+        handleReset("login");
+        history.push("/");
+      } else {
+        alert("Sai ten tai khoan hoac mat khau");
+      }
+    }
   };
   return (
     <div className="wrapper-login">
@@ -28,7 +45,7 @@ function Login() {
         </div>
         <div className="group-form">
           <Input
-            type="text"
+            type="email"
             placeholder="Nhập tên đăng nhập/Email"
             {...register("account", { required: true })}
           />

@@ -18,7 +18,7 @@ export default function Oclock({ stop, getTimeDown, formatTime, getTimeNow }) {
     return () => {
       clearInterval(timeInterval);
     };
-  }, [timeDown, stop]);
+  }, [timeDown, stop, getTimeDown, getTimeNow]);
 
   return <p>{formatTime(timeDown)}</p>;
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./body-style.scss";
 import BodyQuesiton from "./BodyQuestion/BodyQuestion";
 import RatingsTable from "./RatingsTable/RatingsTable";
