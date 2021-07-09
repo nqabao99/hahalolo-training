@@ -1,19 +1,18 @@
-import React, { useState, useEffect, createContext } from "react";
-
+import React, { useState, useEffect, createContext, useContext } from "react";
 import DetailQuestion from "./DetailQuestion";
-
 import QuestionItems from "./QuestionItems";
-
 import Button from "../../../common/Button/index";
 import ResultModal from "./ResultModal/ResultModal";
 import ControllerQuestion from "./ControlleQuestion/ControlleQuestion";
 import Warning from "./Warning/Warning";
-
 import Spinner from "./Loading/Loading";
+
+import { contextApp } from "../../../App";
 
 export const contextBodyQuestion = createContext();
 
 function Index({ handleEndClick }) {
+  const contextapp = useContext(contextApp);
   const [dataQuestion, setDataQuestion] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -111,6 +110,45 @@ function Index({ handleEndClick }) {
   const closeResultModalClick = () => {
     setOpenModal(false);
     handleEndClick(true);
+    fetchQuestion();
+  };
+
+  const fetchQuestion = async () => {
+    let ramdomID = Math.random().toString(36).substring(7);
+    const user = JSON.parse(localStorage.getItem("user-info"));
+    let data = {
+      id: ramdomID,
+      id_user: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      timeOut: timeOut,
+      scores: result.scores,
+    };
+
+    let check = contextapp.listResult.find((item) => item.id_user === user.id);
+
+    if (check) {
+      if (data.scores > check.scores) {
+        console.log("thay", data);
+      } else {
+        if (data.scores === check.scores) {
+          if (data.timeOut > check.timeOut) {
+            console.log("thay", data);
+          }
+        }
+      }
+    } else {
+      await fetch("http://localhost:3000/listResult", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+    }
+
+    contextapp.handleListResult(ramdomID);
   };
 
   const prevQuestion = () => {
