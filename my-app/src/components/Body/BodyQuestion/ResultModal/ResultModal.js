@@ -22,7 +22,10 @@ function ResultModal({ closeResultModalClick }) {
               <h2>Đáp án của bạn</h2>
               <div className="modal-body__table-result">
                 {context.selectQuestion.map((item) => (
-                  <span key={item.answer_id}>
+                  <span
+                    key={item.answer_id}
+                    className={item.result ? "correct" : "wrong"}
+                  >
                     {`${
                       item.parent_id.length > 10
                         ? item.parent_id.slice(-2)
