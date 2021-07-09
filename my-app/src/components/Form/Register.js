@@ -4,6 +4,30 @@ import { contextApp } from "../../App";
 import Input from "../../common/Input";
 import "./login-style.scss";
 import { useHistory } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+  firstName: yup
+    .string()
+    .required("Bạn chưa nhập trường này!")
+    .min(3, "Họ phải từ 3-30 ký tự")
+    .max(30, "Họ phải từ 3-30 ký tự"),
+  lastName: yup
+    .string()
+    .required("Bạn chưa nhập trường này!")
+    .min(3, "Tên phải từ 3-30 ký tự")
+    .max(30, "Tên phải từ 3-30 ký tự"),
+  account: yup
+    .string()
+    .email("Email không hợp lệ")
+    .required("Bạn chưa nhập trường này!"),
+  password: yup
+    .string()
+    .required("Bạn chưa nhập trường này!")
+    .min(3, "Mật khẩu phải từ 3-30 ký tự")
+    .max(30, "Mật khẩu phải từ 3-30 ký tự"),
+});
 
 function Register() {
   let history = useHistory();
@@ -15,7 +39,7 @@ function Register() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({ resolver: yupResolver(schema) });
 
   async function onHandleSubmit(data, e) {
     let ramdomID = Math.random().toString(36).substring(7);
@@ -61,42 +85,36 @@ function Register() {
         </div>
         <div className="group-form group-form__cover">
           <div>
-            <Input
-              type="text"
-              placeholder="Họ"
-              {...register("fistName", { required: true })}
-            />
-            {errors.fistName && <p>Bạn chưa nhập trường này!</p>}
+            <input type="text" placeholder="Họ" {...register("firstName")} />
+            <p>{errors.firstName?.message}</p>
           </div>
           <div>
-            <Input
-              type="text"
-              placeholder="Tên"
-              {...register("lastName", { required: true })}
-            />
-            {errors.lastName && <p>Bạn chưa nhập trường này!</p>}
+            <input type="text" placeholder="Tên" {...register("lastName")} />
+            <p>{errors.lastName?.message}</p>
           </div>
         </div>
         <div className="group-form">
-          <Input
+          <input
             type="email"
             placeholder="Tên đăng nhập/Email"
-            {...register("account", { required: true })}
+            {...register("account")}
           />
-          {errors.account ? (
-            <p>Bạn chưa nhập trường này!</p>
-          ) : message ? (
-            <p>Trùng tên tài khoản</p>
-          ) : null}
+          <p>
+            {errors.account?.message
+              ? errors.account?.message
+              : message
+              ? "Trùng tên tài khoản"
+              : null}
+          </p>
         </div>
 
         <div className="group-form">
-          <Input
+          <input
             type="password"
             placeholder="Mật khẩu"
-            {...register("password", { required: true })}
+            {...register("password")}
           />
-          {errors.password && <p>Bạn chưa nhập trường này!</p>}
+          <p>{errors.password?.message}</p>
         </div>
 
         <div className="group-form">

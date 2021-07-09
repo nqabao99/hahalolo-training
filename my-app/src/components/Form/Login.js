@@ -4,6 +4,20 @@ import { Link, useHistory } from "react-router-dom";
 import { contextApp } from "../../App";
 import Input from "../../common/Input";
 import "./login-style.scss";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+  account: yup
+    .string()
+    .email("Email không hợp lệ")
+    .required("Bạn chưa nhập trường này!"),
+  password: yup
+    .string()
+    .required("Bạn chưa nhập trường này!")
+    .min(3, "Mật khẩu phải từ 3-30 ký tự")
+    .max(30, "Mật khẩu phải từ 3-30 ký tự"),
+});
 
 function Login() {
   let history = useHistory();
@@ -13,7 +27,7 @@ function Login() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({ resolver: yupResolver(schema) });
   const onHandleSubmit = (data) => {
     if (context.listAccount) {
       let check = context.listAccount.find(
@@ -44,20 +58,20 @@ function Login() {
           </div>
         </div>
         <div className="group-form">
-          <Input
+          <input
             type="email"
             placeholder="Nhập tên đăng nhập/Email"
-            {...register("account", { required: true })}
+            {...register("account")}
           />
-          {errors.account && <p>Bạn chưa nhập trường này!</p>}
+          <p>{errors.account?.message}</p>
         </div>
         <div className="group-form">
-          <Input
+          <input
             type="password"
             placeholder="Nhập mật khẩu"
-            {...register("password", { required: true })}
+            {...register("password")}
           />
-          {errors.password && <p>Bạn chưa nhập trường này!</p>}
+          <p>{errors.password?.message}</p>
         </div>
         <p className="forget-password">
           Quên mật khẩu? <a href="/#"> Nhấn vào đây</a>
