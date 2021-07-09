@@ -40,6 +40,7 @@ function Index({ handleEndClick }) {
   const [timeOut, setTimeOut] = useState(0);
   const [timerNow, setTimeNow] = useState(0);
   const [warning, setWarning] = useState(false);
+  const [result, setResult] = useState();
 
   const handleGetAnswerChange = (data) => {
     if (selectQuestion.length > 0) {
@@ -63,6 +64,25 @@ function Index({ handleEndClick }) {
     }
   };
 
+  function getResult() {
+    let result;
+    let sumQuestion = dataQuestion.length;
+    let countQuestionCorrect = 0;
+    let countQuestionWrong = 0;
+    selectQuestion.map((i) =>
+      i.result ? countQuestionCorrect++ : countQuestionWrong++
+    );
+    let scores =
+      Math.round(countQuestionCorrect * (10 / sumQuestion) * 100) / 100;
+
+    result = {
+      scores: scores,
+      countQuestionCorrect: countQuestionCorrect,
+      countQuestionWrong: countQuestionWrong,
+    };
+    setResult(result);
+  }
+
   const handleQuestionSubmit = (e) => {
     e.preventDefault();
 
@@ -71,6 +91,8 @@ function Index({ handleEndClick }) {
     } else {
       setOpenModal(true);
       setFlagStopTime(true);
+
+      getResult();
     }
   };
 
@@ -78,6 +100,8 @@ function Index({ handleEndClick }) {
     setOpenModal(true);
     setFlagStopTime(true);
     setWarning(false);
+
+    getResult();
   };
 
   const handleCloseWarning = () => {
@@ -124,6 +148,7 @@ function Index({ handleEndClick }) {
       setOpenModal(true);
       setFlagStopTime(true);
       setWarning(false);
+      getResult();
     }
   };
 
@@ -136,6 +161,7 @@ function Index({ handleEndClick }) {
     getTimeNow: getTimeNow,
     timeOut: timeOut,
     flagStopTime: flagStopTime,
+    result: result,
   };
 
   if (isLoading) {
