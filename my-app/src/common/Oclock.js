@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { contextBodyQuestion } from "../components/Body/BodyQuestion/BodyQuestion";
 
-export default function Oclock({ stop, getTimeDown, formatTime, getTimeNow }) {
+export default function Oclock() {
+  const context = useContext(contextBodyQuestion);
   const [timeDown, setTimeDown] = useState(600);
 
   useEffect(() => {
@@ -8,17 +10,17 @@ export default function Oclock({ stop, getTimeDown, formatTime, getTimeNow }) {
       const timer = timeDown;
       if (timer > 0) setTimeDown(timer - 1);
     }, 1000);
-    if (stop) {
+    if (context.flagStopTime) {
       clearInterval(timeInterval);
-      getTimeDown(timeDown);
+      context.getTimeOut(timeDown);
     } else {
-      getTimeNow(timeDown);
+      context.getTimeNow(timeDown);
     }
 
     return () => {
       clearInterval(timeInterval);
     };
-  }, [timeDown, stop, getTimeDown, getTimeNow]);
+  }, [timeDown]);
 
-  return <p>{formatTime(timeDown)}</p>;
+  return <p>{context.formatTime(timeDown)}</p>;
 }

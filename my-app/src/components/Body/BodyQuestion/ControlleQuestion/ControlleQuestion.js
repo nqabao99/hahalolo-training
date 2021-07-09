@@ -4,14 +4,7 @@ import { contextBodyQuestion } from "../BodyQuestion";
 import Button from "../../../../common/Button/index";
 import Input from "../../../../common/Input";
 
-function Index({
-  prevQuestion,
-  nextQuestion,
-  handleSelectQuestionClick,
-  stopTime,
-  getTimerOclock,
-  getTimeNow,
-}) {
+function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
   const context = useContext(contextBodyQuestion);
 
   const [openListQuestion, setOpenListQuestion] = useState(false);
@@ -37,12 +30,7 @@ function Index({
     <div className="controlle">
       <div className="controlle-question">
         <div className="controlle-question__left">
-          <Oclock
-            getTimeDown={getTimerOclock}
-            stop={stopTime}
-            formatTime={context.formatTime}
-            getTimeNow={getTimeNow}
-          />
+          <Oclock />
           {context.dataQuestion.map(
             (item, index) =>
               index === context.count && (

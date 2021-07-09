@@ -36,8 +36,8 @@ function Index({ handleEndClick }) {
   const [selectQuestion, setSelectQuestion] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [count, setCount] = useState(0);
-  const [stopTime, setStopTime] = useState(false);
-  const [timer, setTimer] = useState(0);
+  const [flagStopTime, setFlagStopTime] = useState(false);
+  const [timeOut, setTimeOut] = useState(0);
   const [timerNow, setTimeNow] = useState(0);
   const [warning, setWarning] = useState(false);
 
@@ -70,13 +70,13 @@ function Index({ handleEndClick }) {
       setWarning(true);
     } else {
       setOpenModal(true);
-      setStopTime(true);
+      setFlagStopTime(true);
     }
   };
 
   const handleWarningBoxSubmit = () => {
     setOpenModal(true);
-    setStopTime(true);
+    setFlagStopTime(true);
     setWarning(false);
   };
 
@@ -114,15 +114,15 @@ function Index({ handleEndClick }) {
     return hours + ":" + min + ":" + sec;
   };
 
-  const getTimerOclock = (data) => {
-    setTimer(data);
+  const getTimeOut = (data) => {
+    setTimeOut(data);
   };
 
   const getTimeNow = (data) => {
     setTimeNow(data);
     if (data === 0) {
       setOpenModal(true);
-      setStopTime(true);
+      setFlagStopTime(true);
       setWarning(false);
     }
   };
@@ -132,6 +132,10 @@ function Index({ handleEndClick }) {
     selectQuestion: selectQuestion,
     count: count,
     formatTime: formatTime,
+    getTimeOut: getTimeOut,
+    getTimeNow: getTimeNow,
+    timeOut: timeOut,
+    flagStopTime: flagStopTime,
   };
 
   if (isLoading) {
@@ -166,9 +170,6 @@ function Index({ handleEndClick }) {
                 prevQuestion={prevQuestion}
                 nextQuestion={nextQuestion}
                 handleSelectQuestionClick={handleSelectQuestionClick}
-                stopTime={stopTime}
-                getTimerOclock={getTimerOclock}
-                getTimeNow={getTimeNow}
               />
 
               <Button className="btn" type="submit" text="Nộp bài" />
@@ -183,10 +184,7 @@ function Index({ handleEndClick }) {
             )}
 
             {openModal && (
-              <ResultModal
-                closeResultModalClick={closeResultModalClick}
-                timer={timer}
-              />
+              <ResultModal closeResultModalClick={closeResultModalClick} />
             )}
           </div>
         </contextBodyQuestion.Provider>

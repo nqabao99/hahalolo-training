@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import "./result-modal.scss";
 import { contextBodyQuestion } from "../BodyQuestion";
 
-function ResultModal({ timer, closeResultModalClick }) {
+function ResultModal({ closeResultModalClick }) {
   const context = useContext(contextBodyQuestion);
   const arrd = [];
   const arrs = [];
@@ -18,7 +18,7 @@ function ResultModal({ timer, closeResultModalClick }) {
           <h1 className="modal-header">KẾT QUẢ</h1>
           <div className="modal-body">
             <div className="modal-body__title">
-              <p>Thời gian: {context.formatTime(600 - timer)}</p>
+              <p>Thời gian: {context.formatTime(600 - context.timeOut)}</p>
               <p>Điểm số: {scores}</p>
               <p>Số câu đúng: {arrd.length}</p>
               <p>Số câu Sai: {arrs.length}</p>
