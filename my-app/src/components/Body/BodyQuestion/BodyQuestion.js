@@ -130,18 +130,17 @@ function Index({ handleEndClick }) {
     if (check) {
       if (data.scores > check.scores) {
         console.log("thay", data);
+        let bao = {
+          "scores": data.scores,
+          "timeOut": data.timeOut,
+        };
         await fetch(`http://localhost:3000/listResult/${data.id}`, {
           method: "PATCH",
+          body: JSON.stringify(bao),
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            listResult: {
-              scores: data.scores,
-              timeOut: data.timeOut,
-            },
-          }),
         });
       } else {
         if (data.scores === check.scores) {
