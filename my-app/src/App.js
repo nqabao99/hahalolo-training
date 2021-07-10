@@ -25,26 +25,33 @@ function App() {
     setListAccount(response);
   };
 
+
+  function descendingSort(arr){
+    for (let i = 0; i < arr.length - 1; i++) {
+      for (let j = i + 1; j < arr.length; j++) {
+        if (arr[i].scores === arr[j].scores) {
+          if (arr[i].timeOut < arr[j].timeOut) {
+            let tg = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tg;
+          }
+        }
+        if (arr[i].scores < arr[j].scores) {
+          let tg = arr[i];
+          arr[i] = arr[j];
+          arr[j] = tg;
+        }
+      }
+    }
+    return arr;
+  }
+
   const fetchListResult = async () => {
     const responseJson = await fetch("http://localhost:3000/listResult");
     const response = await responseJson.json();
 
-    for (let i = 0; i < response.length - 1; i++) {
-      for (let j = i + 1; j < response.length; j++) {
-        if (response[i].scores === response[j].scores) {
-          if (response[i].timeOut < response[j].timeOut) {
-            let tg = response[i];
-            response[i] = response[j];
-            response[j] = tg;
-          }
-        }
-        if (response[i].scores < response[j].scores) {
-          let tg = response[i];
-          response[i] = response[j];
-          response[j] = tg;
-        }
-      }
-    }
+    //hàm sắp xếp giảm theo điểm
+    descendingSort(response);
 
     setListResult(response);
   };
@@ -73,15 +80,13 @@ function App() {
             path="/login"
             render={() => {
               return !user ? <Login /> : <Redirect to="/" />;
-            }}
-            // component={Login}
+            }}          
           />
           <Route
             path="/register"
             render={() => {
               return !user ? <Register /> : <Redirect to="/" />;
             }}
-            // component={Register}
           />
         </Switch>
         <Footer />

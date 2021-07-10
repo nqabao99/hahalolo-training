@@ -73,7 +73,6 @@ function Index({ handleEndClick }) {
     );
     let scores =
       Math.round(countQuestionCorrect * (10 / sumQuestion) * 100) / 100;
-
     result = {
       scores: scores,
       countQuestionCorrect: countQuestionCorrect,
@@ -84,13 +83,11 @@ function Index({ handleEndClick }) {
 
   const handleQuestionSubmit = (e) => {
     e.preventDefault();
-
     if (selectQuestion.length < 10) {
       setWarning(true);
     } else {
       setOpenModal(true);
       setFlagStopTime(true);
-
       getResult();
     }
   };
@@ -99,7 +96,6 @@ function Index({ handleEndClick }) {
     setOpenModal(true);
     setFlagStopTime(true);
     setWarning(false);
-
     getResult();
   };
 
@@ -127,25 +123,28 @@ function Index({ handleEndClick }) {
 
     let check = contextapp.listResult.find((item) => item.id_user === user.id);
 
-    if (check) {
-      if (data.scores > check.scores) {
-        console.log("thay", data);
-        let bao = {
-          "scores": data.scores,
-          "timeOut": data.timeOut,
-        };
-        await fetch(`http://localhost:3000/listResult/${data.id}`, {
+    async function updateListResult(){
+      await fetch(`http://localhost:3000/listResult/${check.id}`, {
           method: "PATCH",
-          body: JSON.stringify(bao),
+          body: JSON.stringify({
+            "scores": data.scores,
+            "timeOut": data.timeOut,
+          }),
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
         });
+    }
+
+
+    if (check) {
+      if (data.scores > check.scores) {     
+        updateListResult();
       } else {
         if (data.scores === check.scores) {
           if (data.timeOut > check.timeOut) {
-            console.log("thay", data);
+            updateListResult();
           }
         }
       }
