@@ -14,3 +14,23 @@ body {
     position: relative;
     min-height: 150vh;
 }
+
+.btn {
+    display: block;
+    margin: 20px auto 0;
+    padding: 15px 100px;
+    border: none;
+    border-radius: 5px;
+  
+    font-size: 15px;
+    font-weight: 700;
+    color: #535353;
+    background: #f1f1f1;
+  
+    cursor: pointer;
+    transition: all 0.3s;
+    &:hover {
+      background: #ffb83c;
+      color: #fff;
+    }
+  }

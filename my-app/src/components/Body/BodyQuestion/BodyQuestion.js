@@ -1,17 +1,19 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import DetailQuestion from "./DetailQuestion";
 import QuestionItems from "./QuestionItems";
-import Button from "../../../common/Button/index";
+import Button from "@material-ui/core/Button";
 import ResultModal from "./ResultModal/ResultModal";
 import ControllerQuestion from "./ControlleQuestion/ControlleQuestion";
 import Warning from "./Warning/Warning";
 import Spinner from "./Loading/Loading";
-
 import { contextApp } from "../../../App";
+import { useButtonStyles } from "../../../common/ButtonStyle";
+import clsx from "clsx";
 
 export const contextBodyQuestion = createContext();
 
 function Index({ handleEndClick }) {
+  const classes = useButtonStyles();
   const contextapp = useContext(contextApp);
   const [dataQuestion, setDataQuestion] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -247,7 +249,7 @@ function Index({ handleEndClick }) {
                 handleSelectQuestionClick={handleSelectQuestionClick}
               />
 
-              <Button className="btn" type="submit" text="Nộp bài" />
+              <Button className={clsx(classes.button, classes.mt)} type="submit">Nộp bài</Button>
             </form>
 
             {warning && (

@@ -2,10 +2,12 @@ import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useHistory } from "react-router-dom";
 import { contextApp } from "../../App";
-import Input from "../../common/Input";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
 import "./login-style.scss";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+
 
 const schema = yup.object().shape({
   account: yup
@@ -49,7 +51,13 @@ function Login() {
       <form onSubmit={handleSubmit(onHandleSubmit)}>
         <h2>Đăng Nhập</h2>
         <div className="group-form">
-          <Input type="button" value="ĐĂNG NHẬP BẰNG FACEBOOK" />
+          <Button 
+          type="button"
+          fullWidth
+          variant="contained" 
+          color="primary"  
+          size="large"
+          >ĐĂNG NHẬP BẰNG FACEBOOK</Button>
         </div>
         <div className=" group-form">
           <div className="login-or">
@@ -58,26 +66,36 @@ function Login() {
           </div>
         </div>
         <div className="group-form">
-          <input
-            type="email"
-            placeholder="Nhập tên đăng nhập/Email"
-            {...register("account")}
-          />
+          <TextField  
+          id="outlined-basic" 
+          type="email"
+          label="Nhập Email" 
+          fullWidth
+          variant="outlined"
+          {...register("account")} />
           <p>{errors.account?.message}</p>
         </div>
         <div className="group-form">
-          <input
-            type="password"
-            placeholder="Nhập mật khẩu"
-            {...register("password")}
-          />
+          <TextField  
+          id="outlined-basic" 
+          type="password"
+          label="Nhập mật khẩu" 
+          fullWidth
+          variant="outlined"
+          {...register("password")}/>
           <p>{errors.password?.message}</p>
         </div>
         <p className="forget-password">
           Quên mật khẩu? <a href="/#"> Nhấn vào đây</a>
         </p>
         <div className="group-form">
-          <Input type="submit" value="ĐĂNG NHẬP" />
+          <Button 
+          type="submit"
+          fullWidth
+          variant="contained" 
+          color="secondary"  
+          size="large"
+          >ĐĂNG NHẬP</Button>
         </div>
         <p className="signup">
           Nếu bạn chưa có tài khoản? <Link to="/register"> Đăng ký ngay</Link>

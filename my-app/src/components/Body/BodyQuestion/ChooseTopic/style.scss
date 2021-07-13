@@ -29,17 +29,20 @@
       display: flex;
       justify-content: space-between;
       margin-top: 20px;
-      .choose-step1 {
-        width: 48%;
-        height: 50px;
-        padding: 15px;
-        font-size: 16px;
-        outline: none;
-        option {
-          background: #f6f4f4;
-          color: #1f31b4;
-        }
+      .MuiInputBase-fullWidth{
+        width: 90%;
       }
+      // .choose-step1 {
+      //   width: 48%;
+      //   height: 50px;
+      //   padding: 15px;
+      //   font-size: 16px;
+      //   outline: none;
+      //   option {
+      //     background: #f6f4f4;
+      //     color: #1f31b4;
+      //   }
+      // }
     }
   }
   &__step2 {
@@ -76,6 +79,8 @@
       border-radius: 5px;
       border: none;
       font-size: 20px;
+      color: #535353;
+      background: #f1f1f1;
       padding: 15px 50px;
       cursor: pointer;
       transition: all 0.3s;

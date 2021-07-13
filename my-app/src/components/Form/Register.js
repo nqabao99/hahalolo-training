@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { contextApp } from "../../App";
-import Input from "../../common/Input";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
 import "./login-style.scss";
 import { useHistory } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -75,7 +76,13 @@ function Register() {
         <h2>Đăng ký</h2>
 
         <div className="group-form">
-          <Input type="button" value="ĐĂNG KÝ BẰNG FACEBOOK" />
+          <Button 
+          type="button"
+          fullWidth
+          variant="contained" 
+          color="primary"  
+          size="large"
+          >ĐĂNG NHẬP BẰNG FACEBOOK</Button>
         </div>
         <div className=" group-form">
           <div className="login-or">
@@ -85,20 +92,33 @@ function Register() {
         </div>
         <div className="group-form group-form__cover">
           <div>
-            <input type="text" placeholder="Họ" {...register("firstName")} />
+            <TextField  
+            id="outlined-basic" 
+            type="text"
+            label="Họ" 
+            variant="outlined"
+            {...register("firstName")} />
             <p>{errors.firstName?.message}</p>
           </div>
           <div>
-            <input type="text" placeholder="Tên" {...register("lastName")} />
+            <TextField  
+            id="outlined-basic" 
+            type="text"
+            label="Tên" 
+            fullWidth
+            variant="outlined"
+            {...register("lastName")} />
             <p>{errors.lastName?.message}</p>
           </div>
         </div>
         <div className="group-form">
-          <input
+        <TextField  
+            id="outlined-basic" 
             type="email"
-            placeholder="Tên đăng nhập/Email"
-            {...register("account")}
-          />
+            label="Email" 
+            fullWidth
+            variant="outlined"
+            {...register("account")} />
           <p>
             {errors.account?.message
               ? errors.account?.message
@@ -109,16 +129,24 @@ function Register() {
         </div>
 
         <div className="group-form">
-          <input
+        <TextField  
+            id="outlined-basic" 
             type="password"
-            placeholder="Mật khẩu"
-            {...register("password")}
-          />
+            label="Mật khẩu" 
+            fullWidth
+            variant="outlined"
+            {...register("password")}/>
           <p>{errors.password?.message}</p>
         </div>
 
         <div className="group-form">
-          <Input type="submit" value="ĐĂNG KÝ" />
+          <Button 
+          type="submit"
+          fullWidth
+          variant="contained" 
+          color="secondary"  
+          size="large"
+          >ĐĂNG KÝ</Button>
         </div>
       </form>
     </div>

@@ -46,17 +46,18 @@ function App() {
     return arr;
   }
 
-  const fetchListResult = async () => {
-    const responseJson = await fetch("http://localhost:3000/listResult");
-    const response = await responseJson.json();
-
-    //hàm sắp xếp giảm theo điểm
-    descendingSort(response);
-
-    setListResult(response);
-  };
+  
 
   useEffect(() => {
+    const fetchListResult = async () => {
+      const responseJson = await fetch("http://localhost:3000/listResult");
+      const response = await responseJson.json();
+  
+      //hàm sắp xếp giảm theo điểm
+      descendingSort(response);
+  
+      setListResult(response);
+    };
     fetchAccount();
     fetchListResult();
   }, [reset, resetListResult]);
@@ -80,7 +81,8 @@ function App() {
             path="/login"
             render={() => {
               return !user ? <Login /> : <Redirect to="/" />;
-            }}          
+            }}
+           
           />
           <Route
             path="/register"

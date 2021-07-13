@@ -1,11 +1,14 @@
 import React, { useContext, useState } from "react";
-
+import {useButtonStyles} from "../../../common/ButtonStyle";
 import RatingsTableItems from "./RatingsTableItems";
-import Button from "../../../common/Button/index";
+import Button from "@material-ui/core/Button";
 import "./style.scss";
 import { contextApp } from "../../../App";
 
+
 function RatingsTable() {
+
+  const classes = useButtonStyles()
 
   const formatTime = (sec) => {
     var hours = Math.floor(sec / 3600);
@@ -51,7 +54,14 @@ function RatingsTable() {
           )}
 
         </div>
-        {number !== 10 && <Button onClick={handleNumberClick} className="btn body-ratings__btn" text="Xem thêm" />}
+        {number !== 10 && 
+        <Button 
+        variant="contained"
+        onClick={handleNumberClick} 
+        className={classes.button}
+        >
+          Xem thêm
+        </Button>}
         
       </div>
     </div>

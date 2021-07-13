@@ -1,10 +1,13 @@
 import React, { useContext, useState } from "react";
 import Oclock from "../../../../common/Oclock";
 import { contextBodyQuestion } from "../BodyQuestion";
-import Button from "../../../../common/Button/index";
+import Button from "@material-ui/core/Button";
 import Input from "../../../../common/Input";
+import {useButtonStyles} from "../../../../common/ButtonStyle";
+import clsx from "clsx";
 
 function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
+  const classes = useButtonStyles()
   const context = useContext(contextBodyQuestion);
 
   const [openListQuestion, setOpenListQuestion] = useState(false);
@@ -50,27 +53,30 @@ function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
           <Button
             disabled={context.count === 0 ? true : false}
             type="button"
-            className="btn-next"
+            className={clsx(classes.button, classes.icon, classes.controlleButton)}
             onClick={prevQuestion}
-            icon="fa fa-caret-left"
-          ></Button>
+          >
+            <i className="fa fa-caret-left"></i>
+          </Button>
 
           <Button
             disabled={
               context.count < context.dataQuestion.length - 1 ? false : true
             }
             type="button"
-            className="btn-next"
+            className={clsx(classes.button, classes.icon, classes.controlleButton)}
             onClick={nextQuestion}
-            icon="fa fa-caret-right"
-          ></Button>
+          >
+            <i className="fa fa-caret-right"></i>
+          </Button>
 
           <Button
             type="button"
-            className="btn-next"
+            className={clsx(classes.button, classes.icon, classes.controlleButton)}
             onClick={handleListQuestionClick}
-            icon="fa fa-ellipsis-h"
-          ></Button>
+          >
+            <i className="fa fa-ellipsis-h"></i>
+          </Button>
         </div>
       </div>
 

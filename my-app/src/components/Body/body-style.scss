@@ -100,25 +100,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    .btn-next {
-      border: none;
-      border-radius: 5px;
-      margin-left: 10px;
-      cursor: pointer;
-      transition: all 0.3s;
-      &:hover {
-        background: #ffb83c;
-        color: #fff;
-      }
-      &:disabled {
-        background-color: rgba(239, 239, 239, 0.5);
-        color: rgba(59, 59, 59, 0.5);
-      }
-      i {
-        font-size: 20px;
-        padding: 2px 10px;
-      }
-    }
   }
 
   #select {
@@ -148,3 +129,5 @@
     }
   }
 }
+
+
