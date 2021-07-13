@@ -12,12 +12,12 @@ const schema = yup.object().shape({
   firstName: yup
     .string()
     .required("Bạn chưa nhập trường này!")
-    .min(3, "Họ phải từ 3-30 ký tự")
+    .min(2, "Họ phải từ 3-30 ký tự")
     .max(30, "Họ phải từ 3-30 ký tự"),
   lastName: yup
     .string()
     .required("Bạn chưa nhập trường này!")
-    .min(3, "Tên phải từ 3-30 ký tự")
+    .min(1, "Tên phải từ 3-30 ký tự")
     .max(30, "Tên phải từ 3-30 ký tự"),
   account: yup
     .string()

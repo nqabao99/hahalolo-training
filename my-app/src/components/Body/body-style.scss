@@ -56,28 +56,8 @@
       }
     }
     &__form {
-      .answer {
-        position: relative;
-        width: 100%;
-        height: 40px;
-        margin-top: 10px;
-        border: 1px solid #acacac;
-        border-radius: 7px;
-        label {
-          font-size: 17px;
-          color: #000;
-          display: block;
-          line-height: 40px;
-
-          padding-left: 30px;
-          cursor: pointer;
-        }
-        input {
-          margin: 0 0 0 10px;
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-        }
+      label{
+        margin-right: 0;
       }
     }
   }
@@ -88,18 +68,26 @@
   border-radius: 8px;
   &-question {
     // height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     &__left {
+      display: flex;
+      align-items: center;
+      .MuiIconButton-label,
+      .MuiCheckbox-colorSecondary.Mui-checked {
+        color: #ffb83c;
+    }
       p,
       label {
         color: #fff;
         display: inline;
         margin-right: 10px;
         font-size: 18px;
+        user-select: none;
       }
     }
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+   
   }
 
   #select {

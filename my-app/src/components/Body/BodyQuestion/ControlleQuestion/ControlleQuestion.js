@@ -1,10 +1,11 @@
+import Button from "@material-ui/core/Button";
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import clsx from "clsx";
 import React, { useContext, useState } from "react";
+import { useButtonStyles } from "../../../../common/ButtonStyle";
 import Oclock from "../../../../common/Oclock";
 import { contextBodyQuestion } from "../BodyQuestion";
-import Button from "@material-ui/core/Button";
-import Input from "../../../../common/Input";
-import {useButtonStyles} from "../../../../common/ButtonStyle";
-import clsx from "clsx";
 
 function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
   const classes = useButtonStyles()
@@ -37,15 +38,30 @@ function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
           {context.dataQuestion.map(
             (item, index) =>
               index === context.count && (
-                <label htmlFor={item.id} key={`input${item.id}`}>
-                  <Input
-                    id={item.id}
-                    type="checkbox"
-                    defaultChecked={selectChecked.includes(item.id)}
-                    onChange={() => selectCheckedChange(item.id)}
+                // <label htmlFor={item.id} key={`input${item.id}`}>
+                //   <Input
+                //     id={item.id}
+                //     type="checkbox"
+                //     defaultChecked={selectChecked.includes(item.id)}
+                //     onChange={() => selectCheckedChange(item.id)}
+                //   />
+                  
+                //   Xem lại
+                // </label>
+
+                <FormControlLabel
+                key={`input${item.id}`}
+                    checked={selectChecked.includes(item.id)}
+                    control={
+                      <Checkbox
+                        color="secondary"
+                        id={item.id}
+                        onChange={() => selectCheckedChange(item.id)}
+                      />
+                    }
+                    label="Xem Lại"
                   />
-                  Xem lại
-                </label>
+              
               )
           )}
         </div>

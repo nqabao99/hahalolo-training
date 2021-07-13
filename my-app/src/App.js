@@ -27,22 +27,7 @@ function App() {
 
 
   function descendingSort(arr){
-    for (let i = 0; i < arr.length - 1; i++) {
-      for (let j = i + 1; j < arr.length; j++) {
-        if (arr[i].scores === arr[j].scores) {
-          if (arr[i].timeOut < arr[j].timeOut) {
-            let tg = arr[i];
-            arr[i] = arr[j];
-            arr[j] = tg;
-          }
-        }
-        if (arr[i].scores < arr[j].scores) {
-          let tg = arr[i];
-          arr[i] = arr[j];
-          arr[j] = tg;
-        }
-      }
-    }
+    arr.sort((a, b) =>  b.scores === a.scores? (b.timeOut - a.timeOut) :  (b.scores - a.scores))
     return arr;
   }
 
