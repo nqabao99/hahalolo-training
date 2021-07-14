@@ -2,12 +2,16 @@ import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useHistory } from "react-router-dom";
 import { contextApp } from "../../App";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import "./login-style.scss";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
+import LinkMUI from "@material-ui/core/Link";
 
+import { useFormStyle } from "./FormStyle";
 
 const schema = yup.object().shape({
   account: yup
@@ -22,6 +26,7 @@ const schema = yup.object().shape({
 });
 
 function Login() {
+  const classes = useFormStyle();
   let history = useHistory();
   const context = useContext(contextApp);
 
@@ -47,61 +52,73 @@ function Login() {
     }
   };
   return (
-    <div className="wrapper-login">
-      <form onSubmit={handleSubmit(onHandleSubmit)}>
-        <h2>Đăng Nhập</h2>
-        <div className="group-form">
-          <Button 
+    <Container className={classes.wrapperLogin} maxWidth="sm">
+      <form onSubmit={handleSubmit(onHandleSubmit)} className={classes.form}>
+        <Typography component="h4" variant="h4" align="center" color="primary">
+          Đăng Nhập
+        </Typography>
+
+        <Button
           type="button"
           fullWidth
-          variant="contained" 
-          color="primary"  
+          variant="contained"
+          color="primary"
           size="large"
-          >ĐĂNG NHẬP BẰNG FACEBOOK</Button>
-        </div>
-        <div className=" group-form">
-          <div className="login-or">
-            <hr />
-            <span>hoặc</span>
-          </div>
-        </div>
-        <div className="group-form">
-          <TextField  
-          id="outlined-basic" 
-          type="email"
-          label="Nhập Email" 
-          fullWidth
-          variant="outlined"
-          {...register("account")} />
-          <p>{errors.account?.message}</p>
-        </div>
-        <div className="group-form">
-          <TextField  
-          id="outlined-basic" 
-          type="password"
-          label="Nhập mật khẩu" 
-          fullWidth
-          variant="outlined"
-          {...register("password")}/>
-          <p>{errors.password?.message}</p>
-        </div>
-        <p className="forget-password">
-          Quên mật khẩu? <a href="/#"> Nhấn vào đây</a>
-        </p>
-        <div className="group-form">
-          <Button 
+          className={classes.margin}
+        >
+          ĐĂNG NHẬP BẰNG FACEBOOK
+        </Button>
+
+        <Box className={classes.loginOr}>
+          <Typography component="hr"></Typography>
+          <Typography className={classes.span} component="span">
+            hoặc
+          </Typography>
+        </Box>
+
+        <Box className={classes.margin}>
+          <TextField
+            label="Nhập Email"
+            fullWidth
+            variant="outlined"
+            autoComplete="true"
+            {...register("account")}
+          />
+          <Typography className={classes.errors} component="p">
+            {errors.account?.message}
+          </Typography>
+        </Box>
+        <Box>
+          <TextField
+            type="password"
+            label="Nhập mật khẩu"
+            fullWidth
+            variant="outlined"
+            autoComplete="true"
+            {...register("password")}
+          />
+          <Typography className={classes.errors} component="p">
+            {errors.password?.message}
+          </Typography>
+        </Box>
+        <Typography className={classes.margin} component="p" align="right">
+          Quên mật khẩu? <LinkMUI href="/#"> Nhấn vào đây</LinkMUI>
+        </Typography>
+        <Button
           type="submit"
           fullWidth
-          variant="contained" 
-          color="secondary"  
+          variant="contained"
+          color="secondary"
           size="large"
-          >ĐĂNG NHẬP</Button>
-        </div>
-        <p className="signup">
-          Nếu bạn chưa có tài khoản? <Link to="/register"> Đăng ký ngay</Link>
-        </p>
+        >
+          ĐĂNG NHẬP
+        </Button>
+
+        <Typography className={classes.margin} component="p" align="right">
+          Nếu bạn chưa có tài khoản?<Link className={classes.a} to="/register"> Đăng ký ngay</Link>
+        </Typography>
       </form>
-    </div>
+    </Container>
   );
 }
 

@@ -3,10 +3,13 @@ import { useForm } from "react-hook-form";
 import { contextApp } from "../../App";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import "./login-style.scss";
 import { useHistory } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useFormStyle } from "./FormStyle";
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 
 const schema = yup.object().shape({
   firstName: yup
@@ -31,6 +34,7 @@ const schema = yup.object().shape({
 });
 
 function Register() {
+  const classes = useFormStyle();
   let history = useHistory();
   const [message, setMessage] = useState(false);
 
@@ -71,85 +75,100 @@ function Register() {
   }
 
   return (
-    <div className="wrapper-login">
-      <form onSubmit={handleSubmit(onHandleSubmit)}>
-        <h2>Đăng ký</h2>
+    <Container className={classes.wrapperLogin} maxWidth="sm">
+      <form onSubmit={handleSubmit(onHandleSubmit)} className={classes.form}>
+        <Typography component="h4" variant="h4" align="center" color="primary">
+          Đăng ký
+        </Typography>
 
-        <div className="group-form">
-          <Button 
+        <Button
           type="button"
           fullWidth
-          variant="contained" 
-          color="primary"  
+          variant="contained"
+          color="primary"
           size="large"
-          >ĐĂNG NHẬP BẰNG FACEBOOK</Button>
-        </div>
-        <div className=" group-form">
-          <div className="login-or">
-            <hr />
-            <span>hoặc</span>
-          </div>
-        </div>
-        <div className="group-form group-form__cover">
-          <div>
-            <TextField  
-            id="outlined-basic" 
+          className={classes.margin}
+        >
+          ĐĂNG NHẬP BẰNG FACEBOOK
+        </Button>
+
+        <Box className={classes.loginOr}>
+          <Typography component="hr"></Typography>
+          <Typography className={classes.span} component="span">
+            hoặc
+          </Typography>
+        </Box>
+
+        <Box className={classes.margin}>
+          <TextField
             type="text"
-            label="Họ" 
+            label="Họ"
             variant="outlined"
-            {...register("firstName")} />
-            <p>{errors.firstName?.message}</p>
-          </div>
-          <div>
-            <TextField  
-            id="outlined-basic" 
+            fullWidth
+            autoComplete="true"
+            {...register("firstName")}
+          />
+          <Typography className={classes.errors} component="p">
+            {errors.firstName?.message}
+          </Typography>
+        </Box>
+        <Box>
+          <TextField
             type="text"
-            label="Tên" 
+            label="Tên"
             fullWidth
             variant="outlined"
-            {...register("lastName")} />
-            <p>{errors.lastName?.message}</p>
-          </div>
-        </div>
-        <div className="group-form">
-        <TextField  
-            id="outlined-basic" 
-            type="email"
-            label="Email" 
+            autoComplete="true"
+            {...register("lastName")}
+          />
+          <Typography className={classes.errors} component="p">
+            {errors.lastName?.message}
+          </Typography>
+        </Box>
+
+        <Box className={classes.margin}>
+          <TextField
+            label="Email"
             fullWidth
             variant="outlined"
-            {...register("account")} />
-          <p>
+            autoComplete="true"
+            {...register("account")}
+          />
+          <Typography className={classes.errors} component="p">
             {errors.account?.message
               ? errors.account?.message
               : message
               ? "Trùng tên tài khoản"
               : null}
-          </p>
-        </div>
+          </Typography>
+        </Box>
 
-        <div className="group-form">
-        <TextField  
-            id="outlined-basic" 
+        <Box>
+          <TextField
             type="password"
-            label="Mật khẩu" 
+            label="Mật khẩu"
             fullWidth
             variant="outlined"
-            {...register("password")}/>
-          <p>{errors.password?.message}</p>
-        </div>
+            autoComplete="true"
+            {...register("password")}
+          />
+          <Typography className={classes.errors} component="p">
+            {errors.password?.message}
+          </Typography>
+        </Box>
 
-        <div className="group-form">
-          <Button 
+        <Button
+          className={classes.margin}
           type="submit"
           fullWidth
-          variant="contained" 
-          color="secondary"  
+          variant="contained"
+          color="secondary"
           size="large"
-          >ĐĂNG KÝ</Button>
-        </div>
+        >
+          ĐĂNG KÝ
+        </Button>
       </form>
-    </div>
+    </Container>
   );
 }
 
