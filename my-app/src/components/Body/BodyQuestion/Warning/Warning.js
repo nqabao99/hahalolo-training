@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import "./style-warning.scss";
-import Button from "../../../../common/Button/index";
+import Button from "@material-ui/core/Button";
 import { contextBodyQuestion } from "../BodyQuestion";
 function Warning({ handleCloseWarning, handleWarningBoxSubmit, timerNow }) {
   const context = useContext(contextBodyQuestion);
@@ -18,13 +18,12 @@ function Warning({ handleCloseWarning, handleWarningBoxSubmit, timerNow }) {
           <Button
             type="button"
             onClick={handleWarningBoxSubmit}
-            text="Nộp bài"
-          ></Button>
+            variant="contained"
+          >Nộp bài</Button>
           <Button
             type="button"
             onClick={handleCloseWarning}
-            text="Làm tiếp"
-          ></Button>
+          >Làm tiếp</Button>
         </div>
       </div>
     </>
