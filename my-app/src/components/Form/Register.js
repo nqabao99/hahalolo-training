@@ -101,6 +101,8 @@ function Register() {
 
         <Box className={classes.margin}>
           <TextField
+            error={errors.firstName&& true}
+            // helperText={errors.firstName && errors.firstName?.message}
             type="text"
             label="Họ"
             variant="outlined"
@@ -114,6 +116,8 @@ function Register() {
         </Box>
         <Box>
           <TextField
+            error={errors.lastName&& true}
+            // helperText={errors.lastName && errors.lastName?.message}
             type="text"
             label="Tên"
             fullWidth
@@ -128,6 +132,12 @@ function Register() {
 
         <Box className={classes.margin}>
           <TextField
+            error={(errors.account || message) && true}
+            // helperText={errors.account && errors.account?.message
+            //   ? errors.account?.message
+            //   : message
+            //   ? "Trùng tên tài khoản"
+            //   : null}
             label="Email"
             fullWidth
             variant="outlined"
@@ -145,6 +155,8 @@ function Register() {
 
         <Box>
           <TextField
+            error={errors.password&& true}
+            // helperText={errors.password && errors.password?.message}
             type="password"
             label="Mật khẩu"
             fullWidth

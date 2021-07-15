@@ -26,8 +26,10 @@ export const useFormStyle = makeStyles(() => ({
     backgroundColor: "#fff",
   },
   errors: {
+    fontSize: "14px",
     color: "red",
     paddingTop: "10px",
+    marginLeft: "15px",
     marginBottom: "-10px",
   },
   a: {

@@ -78,6 +78,8 @@ function Login() {
 
         <Box className={classes.margin}>
           <TextField
+            error={errors.account&& true}
+            // helperText={errors.account && errors.account?.message}
             label="Nhập Email"
             fullWidth
             variant="outlined"
@@ -90,6 +92,8 @@ function Login() {
         </Box>
         <Box>
           <TextField
+            error={errors.password&& true}
+            // helperText={errors.password && errors.password?.message}
             type="password"
             label="Nhập mật khẩu"
             fullWidth
