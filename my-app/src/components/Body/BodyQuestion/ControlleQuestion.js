@@ -3,10 +3,9 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import clsx from "clsx";
 import React, { useContext, useState } from "react";
-import { useButtonStyles } from "../../../../common/ButtonStyle";
-import Oclock from "../../../../common/Oclock";
-import { contextBodyQuestion } from "../BodyQuestion";
-
+import { useButtonStyles } from "../../../common/ButtonStyle";
+import Oclock from "../../../common/Oclock";
+import { contextBodyQuestion } from "./BodyQuestion";
 
 function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
   const classes = useButtonStyles();
@@ -35,7 +34,7 @@ function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
     <div className="controlle">
       <div className="controlle-question">
         <div className="controlle-question__left">
-        <Button
+          <Button
             variant="contained"
             className={clsx(classes.button, classes.mr)}
             type="submit"
@@ -61,7 +60,6 @@ function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
           )}
 
           <Oclock />
-          
         </div>
         <div>
           <Button

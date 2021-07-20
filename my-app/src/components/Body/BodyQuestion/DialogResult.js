@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import clsx from "clsx";
 import { contextBodyQuestion } from "./BodyQuestion";
+import { useSelector } from "react-redux";
 
 const useStyleDialog = makeStyles(() => ({
   titleRusult: {
@@ -44,9 +45,11 @@ const useStyleDialog = makeStyles(() => ({
   },
 }));
 
-export default function CustomizedDialogs({closeResultModalClick }) {
+export default function CustomizedDialogs({ closeResultModalClick }) {
   const classes = useStyleDialog();
   const context = useContext(contextBodyQuestion);
+  const timeOut = useSelector((state) => state.question.timeOut);
+  const result = useSelector((state) => state.question.result);
 
   return (
     <Dialog open={true}>
@@ -61,16 +64,16 @@ export default function CustomizedDialogs({closeResultModalClick }) {
 
       <Box className={classes.containerStatistical}>
         <Typography className={classes.textStatistical} component="p">
-          Thời gian: {context.formatTime(600 - context.timeOut)}
+          Thời gian: {context.formatTime(600 - timeOut).slice(-5)}
         </Typography>
         <Typography className={classes.textStatistical} component="p">
-          Điểm số: {context.result.scores}
+          Điểm số: {result.scores}
         </Typography>
         <Typography className={classes.textStatistical} component="p">
-          Số câu đúng: {context.result.countQuestionCorrect}
+          Số câu đúng: {result.countQuestionCorrect}
         </Typography>
         <Typography className={classes.textStatistical} component="p">
-          Số câu sai: {context.result.countQuestionWrong}
+          Số câu sai: {result.countQuestionWrong}
         </Typography>
       </Box>
 
@@ -105,9 +108,11 @@ export default function CustomizedDialogs({closeResultModalClick }) {
         </Typography>
         <Box className={classes.tableResult}>
           {context.dataQuestion.map((item, index) => (
-            <Typography 
-            component="span"
-            className={classes.itemTableResult} key={item.id}>
+            <Typography
+              component="span"
+              className={classes.itemTableResult}
+              key={item.id}
+            >
               {item.answers.map((i) =>
                 i.result
                   ? `${index + 1} - 

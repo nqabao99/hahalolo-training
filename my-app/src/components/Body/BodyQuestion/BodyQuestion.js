@@ -1,43 +1,43 @@
-import React, { useState, useEffect, createContext, useContext } from "react";
+import React, { useState, createContext, useContext } from "react";
 import DetailQuestion from "./DetailQuestion";
 import QuestionItems from "./QuestionItems";
 
-import ControllerQuestion from "./ControlleQuestion/ControlleQuestion";
+import ControllerQuestion from "./ControlleQuestion";
 import Spinner from "./Loading/Loading";
 import { contextApp } from "../../../App";
-
 
 import DialogWarning from "./DialogWarning";
 import DialogResult from "./DialogResult";
 
-import {useAxios} from "../../../hooks/useAxios";
+import { useAxios } from "../../../hooks/useAxios";
 import axios from "axios";
+
+import { useDispatch, useSelector } from "react-redux";
+import {
+  SetOpenModalResult,
+  SetOpenModalWarning,
+  SetFlagStopTime,
+  SetResult,
+} from "../../../actions/Question";
 
 export const contextBodyQuestion = createContext();
 
 function Index({ handleEndClick }) {
   const contextapp = useContext(contextApp);
-  // const [dataQuestion, setDataQuestion] = useState([]);
-  // const [isLoading, setIsLoading] = useState(true);
 
-  // const sleep = (ms) => {
-  //   return new Promise((resolve) => setTimeout(resolve, ms));
-  // };
-
-  const { response: dataQuestion, loading : isLoading } = useAxios({
-    method: 'get',
-    url: 'http://localhost:3000/question'
-});
-
+  const { response: dataQuestion, loading: isLoading } = useAxios({
+    method: "get",
+    url: "http://localhost:3000/question",
+  });
 
   const [selectQuestion, setSelectQuestion] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
   const [count, setCount] = useState(0);
-  const [flagStopTime, setFlagStopTime] = useState(false);
-  const [timeOut, setTimeOut] = useState(0);
-  const [warning, setWarning] = useState(false);
-  const [result, setResult] = useState();
 
+  const openModal = useSelector((state) => state.question.openModalResult);
+  const warning = useSelector((state) => state.question.openModalWarning);
+  const timeOut = useSelector((state) => state.question.timeOut);
+  const result = useSelector((state) => state.question.result);
+  const dispatch = useDispatch();
 
   const handleGetAnswerChange = (data) => {
     if (selectQuestion.length > 0) {
@@ -53,14 +53,13 @@ function Index({ handleEndClick }) {
     } else {
       setSelectQuestion([...selectQuestion, data]);
     }
-    
+
     if (count < dataQuestion.length - 1) {
       setTimeout(() => {
-        setCount(count => count  + 1);
+        setCount((count) => count + 1);
       }, 300);
     }
   };
-
 
   function getResult() {
     let result;
@@ -77,36 +76,39 @@ function Index({ handleEndClick }) {
       countQuestionCorrect: countQuestionCorrect,
       countQuestionWrong: countQuestionWrong,
     };
-    setResult(result);
+    dispatch(SetResult(result));
+    // setResult(result);
   }
 
   const handleQuestionSubmit = (e) => {
     e.preventDefault();
     if (selectQuestion.length < 10) {
-      setWarning(true);
+      dispatch(SetOpenModalWarning(true));
     } else {
-      setOpenModal(true);
-      setFlagStopTime(true);
+      dispatch(SetFlagStopTime(true));
+      dispatch(SetOpenModalResult(true));
       getResult();
     }
   };
 
   const handleWarningBoxSubmit = () => {
-    setOpenModal(true);
-    setFlagStopTime(true);
-    setWarning(false);
+    dispatch(SetFlagStopTime(true));
+    dispatch(SetOpenModalResult(true));
+    dispatch(SetOpenModalWarning(false));
     getResult();
   };
 
   const handleCloseWarning = () => {
-    setWarning(false);
+    dispatch(SetOpenModalWarning(false));
   };
 
+  //Xong
   const closeResultModalClick = () => {
-    setOpenModal(false);
+    dispatch(SetFlagStopTime(false));
+    dispatch(SetOpenModalResult(false));
+    dispatch(SetResult(null));
     handleEndClick(true);
     fetchQuestion();
-    setOpenModal(false);
   };
 
   const fetchQuestion = async () => {
@@ -126,9 +128,9 @@ function Index({ handleEndClick }) {
     async function updateListResult() {
       let data1 = {
         scores: data.scores,
-          timeOut: data.timeOut
-      }
-      axios.patch(`http://localhost:3000/listResult/${check.id}`, data1)
+        timeOut: data.timeOut,
+      };
+      axios.patch(`http://localhost:3000/listResult/${check.id}`, data1);
     }
 
     if (check) {
@@ -142,7 +144,7 @@ function Index({ handleEndClick }) {
         }
       }
     } else {
-      axios.post("http://localhost:3000/listResult",data)
+      axios.post("http://localhost:3000/listResult", data);
     }
 
     contextapp.handleListResult(ramdomID);
@@ -173,19 +175,14 @@ function Index({ handleEndClick }) {
     return hours + ":" + min + ":" + sec;
   };
 
-  const getTimeOut = (data) => {
-    setTimeOut(data);
-  };
-
   let listContext = {
     dataQuestion: dataQuestion,
     selectQuestion: selectQuestion,
     count: count,
     formatTime: formatTime,
-    getTimeOut: getTimeOut,
-    timeOut: timeOut,
-    flagStopTime: flagStopTime,
-    result: result,
+    // getTimeOut: getTimeOut,
+    // timeOut: timeOut,
+    // result: result,
   };
 
   if (isLoading) {
@@ -221,15 +218,6 @@ function Index({ handleEndClick }) {
                 nextQuestion={nextQuestion}
                 handleSelectQuestionClick={handleSelectQuestionClick}
               />
-
-              {/* <Button
-                variant="contained"
-                style={{padding: "10px 50px"}}
-                className={clsx(classes.button, classes.mt)}
-                type="submit"
-              >
-                Nộp bài
-              </Button> */}
             </form>
 
             <DialogWarning
@@ -239,7 +227,10 @@ function Index({ handleEndClick }) {
             />
 
             {openModal && (
-              <DialogResult openModal={openModal} closeResultModalClick={closeResultModalClick} />
+              <DialogResult
+                openModal={openModal}
+                closeResultModalClick={closeResultModalClick}
+              />
             )}
           </div>
         </contextBodyQuestion.Provider>
