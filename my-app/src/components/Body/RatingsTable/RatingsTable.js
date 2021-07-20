@@ -41,7 +41,7 @@ function RatingsTable() {
             <p>Điểm</p>
             <p>Thời gian</p>
           </div>
-          {contextapp.listResult.map(
+          {contextapp.listResult?.map(
             (item, index) =>
               index < number && (
                 <RatingsTableItems

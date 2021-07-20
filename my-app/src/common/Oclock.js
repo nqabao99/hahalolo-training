@@ -7,20 +7,20 @@ export default function Oclock() {
 
   useEffect(() => {
     const timeInterval = setInterval(() => {
-      const timer = timeDown;
-      if (timer > 0) setTimeDown(timer - 1);
+      if (timeDown > 0) setTimeDown(timeDown => timeDown - 1);
     }, 1000);
     if (context.flagStopTime) {
       clearInterval(timeInterval);
       context.getTimeOut(timeDown);
-    } else {
-      context.getTimeNow(timeDown);
-    }
+    } 
+    // else {
+    //   context.getTimeNow(timeDown);
+    // }
 
     return () => {
       clearInterval(timeInterval);
     };
   }, [timeDown]);
 
-  return <p>{context.formatTime(timeDown)}</p>;
+  return <p className="oclock">{context.formatTime(timeDown)}</p>;
 }

@@ -26,6 +26,9 @@ export const useButtonStyles = makeStyles(() =>({
   } 
   ,mt:{
     marginTop: "20px"
+  }
+  ,mr:{
+    marginRight: "20px"
   },
   icon: {
     fontSize: "18px",

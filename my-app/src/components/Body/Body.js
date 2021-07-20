@@ -5,6 +5,8 @@ import BodyQuesiton from "./BodyQuestion/BodyQuestion";
 import ChooseTopic from "./BodyQuestion/ChooseTopic/ChooseTopic";
 import RatingsTable from "./RatingsTable/RatingsTable";
 
+
+
 function Index() {
   const history = useHistory();
   const user = JSON.parse(localStorage.getItem("user-info"));

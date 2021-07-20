@@ -1,14 +1,15 @@
 import Button from "@material-ui/core/Button";
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import clsx from "clsx";
 import React, { useContext, useState } from "react";
 import { useButtonStyles } from "../../../../common/ButtonStyle";
 import Oclock from "../../../../common/Oclock";
 import { contextBodyQuestion } from "../BodyQuestion";
 
+
 function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
-  const classes = useButtonStyles()
+  const classes = useButtonStyles();
   const context = useContext(contextBodyQuestion);
 
   const [openListQuestion, setOpenListQuestion] = useState(false);
@@ -34,42 +35,43 @@ function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
     <div className="controlle">
       <div className="controlle-question">
         <div className="controlle-question__left">
-          <Oclock />
+        <Button
+            variant="contained"
+            className={clsx(classes.button, classes.mr)}
+            type="submit"
+          >
+            Nộp bài
+          </Button>
           {context.dataQuestion.map(
             (item, index) =>
               index === context.count && (
-                // <label htmlFor={item.id} key={`input${item.id}`}>
-                //   <Input
-                //     id={item.id}
-                //     type="checkbox"
-                //     defaultChecked={selectChecked.includes(item.id)}
-                //     onChange={() => selectCheckedChange(item.id)}
-                //   />
-                  
-                //   Xem lại
-                // </label>
-
                 <FormControlLabel
-                key={`input${item.id}`}
-                    checked={selectChecked.includes(item.id)}
-                    control={
-                      <Checkbox
-                        color="secondary"
-                        id={item.id}
-                        onChange={(e) => selectCheckedChange(e, item.id)}
-                      />
-                    }
-                    label="Xem Lại"
-                  />
-              
+                  label="Xem Lại"
+                  key={`input${item.id}`}
+                  control={
+                    <Checkbox
+                      checked={selectChecked.includes(item.id)}
+                      color="secondary"
+                      id={item.id}
+                      onChange={(e) => selectCheckedChange(e, item.id)}
+                    />
+                  }
+                />
               )
           )}
+
+          <Oclock />
+          
         </div>
         <div>
           <Button
             disabled={context.count === 0 ? true : false}
             type="button"
-            className={clsx(classes.button, classes.icon, classes.controlleButton)}
+            className={clsx(
+              classes.button,
+              classes.icon,
+              classes.controlleButton
+            )}
             onClick={prevQuestion}
           >
             <i className="fa fa-caret-left"></i>
@@ -80,7 +82,11 @@ function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
               context.count < context.dataQuestion.length - 1 ? false : true
             }
             type="button"
-            className={clsx(classes.button, classes.icon, classes.controlleButton)}
+            className={clsx(
+              classes.button,
+              classes.icon,
+              classes.controlleButton
+            )}
             onClick={nextQuestion}
           >
             <i className="fa fa-caret-right"></i>
@@ -88,7 +94,11 @@ function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
 
           <Button
             type="button"
-            className={clsx(classes.button, classes.icon, classes.controlleButton)}
+            className={clsx(
+              classes.button,
+              classes.icon,
+              classes.controlleButton
+            )}
             onClick={handleListQuestionClick}
           >
             <i className="fa fa-ellipsis-h"></i>

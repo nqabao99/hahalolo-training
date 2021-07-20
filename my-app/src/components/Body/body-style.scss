@@ -63,11 +63,10 @@
   }
 }
 .controlle {
-  background-color: #175692;
-  padding: 20px;
+  background-color: #3a4bcd;
+  padding: 10px 20px;
   border-radius: 8px;
   &-question {
-    // height: 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -94,12 +93,16 @@
     background-color: rgb(157, 213, 251);
   }
 
+  .oclock{
+    margin-left: 10px !important;
+  }
+
   .checked {
     background-color: rgb(255, 222, 183) !important;
   }
 
   .list-question {
-    margin-top: 25px;
+    margin: 10px 0 7px;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;

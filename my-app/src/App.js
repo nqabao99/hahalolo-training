@@ -7,6 +7,8 @@ import Register from "./components/Form/Register";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { useState, useEffect, createContext } from "react";
 
+import axios from "axios";
+
 export const contextApp = createContext();
 function App() {
   const [listAccount, setListAccount] = useState([]);
@@ -20,28 +22,24 @@ function App() {
     setResetListResult(data);
   };
   const fetchAccount = async () => {
-    const responseJson = await fetch("http://localhost:3000/accounts");
-    const response = await responseJson.json();
-    setListAccount(response);
+    axios.get('http://localhost:3000/accounts')
+      .then(function (response) {
+        setListAccount(response.data);
+      })
+    
   };
 
-
   function descendingSort(arr){
-    arr.sort((a, b) =>  b.scores === a.scores? (b.timeOut - a.timeOut) :  (b.scores - a.scores))
+    arr?.sort((a, b) =>  b.scores === a.scores? (b.timeOut - a.timeOut) :  (b.scores - a.scores))
     return arr;
   }
 
-  
-
   useEffect(() => {
     const fetchListResult = async () => {
-      const responseJson = await fetch("http://localhost:3000/listResult");
-      const response = await responseJson.json();
-  
-      //hàm sắp xếp giảm theo điểm
-      descendingSort(response);
-  
-      setListResult(response);
+      axios.get('http://localhost:3000/listResult')
+        .then(function (response) {
+          setListResult(response.data);
+        })
     };
     fetchAccount();
     fetchListResult();
@@ -52,7 +50,7 @@ function App() {
   const listContext = {
     listAccount: listAccount,
     handleReset: handleReset,
-    listResult: listResult,
+    listResult: descendingSort(listResult),
     handleListResult: handleListResult,
   };
 
