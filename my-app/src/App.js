@@ -6,7 +6,6 @@ import Login from "./components/Form/Login";
 import Register from "./components/Form/Register";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { useState, useEffect, createContext } from "react";
-
 import axios from "axios";
 
 export const contextApp = createContext();
@@ -22,24 +21,23 @@ function App() {
     setResetListResult(data);
   };
   const fetchAccount = async () => {
-    axios.get('http://localhost:3000/accounts')
-      .then(function (response) {
-        setListAccount(response.data);
-      })
-    
+    axios.get("http://localhost:3000/accounts").then(function (response) {
+      setListAccount(response.data);
+    });
   };
 
-  function descendingSort(arr){
-    arr?.sort((a, b) =>  b.scores === a.scores? (b.timeOut - a.timeOut) :  (b.scores - a.scores))
+  function descendingSort(arr) {
+    arr?.sort((a, b) =>
+      b.scores === a.scores ? b.timeOut - a.timeOut : b.scores - a.scores
+    );
     return arr;
   }
 
   useEffect(() => {
     const fetchListResult = async () => {
-      axios.get('http://localhost:3000/listResult')
-        .then(function (response) {
-          setListResult(response.data);
-        })
+      axios.get("http://localhost:3000/listResult").then(function (response) {
+        setListResult(response.data);
+      });
     };
     fetchAccount();
     fetchListResult();
@@ -65,7 +63,6 @@ function App() {
             render={() => {
               return !user ? <Login /> : <Redirect to="/" />;
             }}
-           
           />
           <Route
             path="/register"

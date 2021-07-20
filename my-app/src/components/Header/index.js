@@ -4,6 +4,7 @@ import logo from "../../assets/img/logo.png";
 import Image from "../../common/Image";
 import "./header-style.scss";
 import { contextApp } from "../../App";
+import MenuItem from "./MenuItem";
 
 function Header() {
   const context = useContext(contextApp);
@@ -27,27 +28,13 @@ function Header() {
           </div>
           <div className="header-navmenu">
             <ul className="header-navmenu__list">
-              <li className="header-navmenu__items">
-                <a href="#/">thi thptqg</a>
-              </li>
-              <li className="header-navmenu__items">
-                <a href="#/">đề thi kiểm tra</a>
-              </li>
-              <li className="header-navmenu__items">
-                <a href="#/">english test</a>
-              </li>
-              <li className="header-navmenu__items">
-                <a href="#/">it test</a>
-              </li>
-              <li className="header-navmenu__items">
-                <a href="#/">đại học</a>
-              </li>
-              <li className="header-navmenu__items">
-                <a href="#/"> hương nghiệp</a>
-              </li>
-              <li className="header-navmenu__items">
-                <a href="#/">tài liệu</a>
-              </li>
+              <MenuItem text="thi thptqg" />
+              <MenuItem text="đề thi kiểm tra" />
+              <MenuItem text="english test" />
+              <MenuItem text="it test" />
+              <MenuItem text="đại học" />
+              <MenuItem text="hướng nghiệp" />
+              <MenuItem text="tài liệu" />
             </ul>
           </div>
           <div className="header-login">
