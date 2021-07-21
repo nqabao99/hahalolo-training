@@ -1,12 +1,22 @@
-import React, { useEffect, useState, useContext } from "react";
-import { contextBodyQuestion } from "../components/Body/BodyQuestion/BodyQuestion";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { SetTimeOut } from "../actions/Question";
 export default function Oclock() {
-  const context = useContext(contextBodyQuestion);
   const [timeDown, setTimeDown] = useState(600);
   const flagStopTime = useSelector((state) => state.question.flagStopTime);
   const dispatch = useDispatch();
+
+  const formatTime = (sec) => {
+    var hours = Math.floor(sec / 3600);
+    hours >= 1 ? (sec = sec - hours * 3600) : (hours = "00");
+    var min = Math.floor(sec / 60);
+    min >= 1 ? (sec = sec - min * 60) : (min = "00");
+    sec < 1 ? (sec = "00") : void 0;
+    min.toString().length === 1 ? (min = "0" + min) : void 0;
+    sec.toString().length === 1 ? (sec = "0" + sec) : void 0;
+    return hours + ":" + min + ":" + sec;
+  };
+
   useEffect(() => {
     const timeInterval = setInterval(() => {
       if (timeDown > 0) setTimeDown((timeDown) => timeDown - 1);
@@ -25,5 +35,5 @@ export default function Oclock() {
     };
   }, [timeDown, dispatch, flagStopTime]);
 
-  return <p className="oclock">{context.formatTime(timeDown)}</p>;
+  return <p className="oclock">{formatTime(timeDown)}</p>;
 }

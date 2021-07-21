@@ -1,64 +1,61 @@
-import React, { useState, createContext, useContext } from "react";
-import DetailQuestion from "./DetailQuestion";
-import QuestionItems from "./QuestionItems";
-
-import ControllerQuestion from "./ControlleQuestion";
-import Spinner from "./Loading/Loading";
-import { contextApp } from "../../../App";
-
-import DialogWarning from "./DialogWarning";
-import DialogResult from "./DialogResult";
-
-import { useAxios } from "../../../hooks/useAxios";
 import axios from "axios";
-
+import React, { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  SetCountDown,
+  SetCountIndex,
+  SetCountUp,
+  SetDataQuestion,
+  SetFlagStopTime,
+  SetLoading,
   SetOpenModalResult,
   SetOpenModalWarning,
-  SetFlagStopTime,
   SetResult,
+  SetSelectQuestion,
+  SetSelectQuestionNull,
 } from "../../../actions/Question";
-
-export const contextBodyQuestion = createContext();
+import { contextApp } from "../../../App";
+import ControllerQuestion from "./ControlleQuestion";
+import DetailQuestion from "./DetailQuestion";
+import DialogResult from "./DialogResult";
+import DialogWarning from "./DialogWarning";
+import Spinner from "./Loading/Loading";
+import QuestionItems from "./QuestionItems";
 
 function Index({ handleEndClick }) {
   const contextapp = useContext(contextApp);
 
-  const { response: dataQuestion, loading: isLoading } = useAxios({
-    method: "get",
-    url: "http://localhost:3000/question",
-  });
+  const sleep = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  };
 
-  const [selectQuestion, setSelectQuestion] = useState([]);
-  const [count, setCount] = useState(0);
+  useEffect(() => {
+    const fetchQuestion = async () => {
+      await sleep(1000);
+      const responseJson = await fetch("http://localhost:3000/question");
+      const response = await responseJson.json();
+      dispatch(SetDataQuestion(response));
+      dispatch(SetLoading(false));
+    };
+    fetchQuestion();
+  }, []);
 
   const openModal = useSelector((state) => state.question.openModalResult);
   const warning = useSelector((state) => state.question.openModalWarning);
   const timeOut = useSelector((state) => state.question.timeOut);
   const result = useSelector((state) => state.question.result);
+  const dataQuestion = useSelector((state) => state.question.dataQuestion);
+  const count = useSelector((state) => state.question.count);
+  const isLoading = useSelector((state) => state.question.loading);
+  const selectQuestion = useSelector((state) => state.question.selectQuestion);
   const dispatch = useDispatch();
 
   const handleGetAnswerChange = (data) => {
-    if (selectQuestion.length > 0) {
-      const index = selectQuestion.findIndex(
-        (item) => item.parent_id === data.parent_id
-      );
-      if (index >= 0) {
-        selectQuestion[index] = data;
-        setSelectQuestion([...selectQuestion]);
-      } else {
-        setSelectQuestion([...selectQuestion, data]);
-      }
-    } else {
-      setSelectQuestion([...selectQuestion, data]);
-    }
+    dispatch(SetSelectQuestion(data));
 
-    if (count < dataQuestion.length - 1) {
-      setTimeout(() => {
-        setCount((count) => count + 1);
-      }, 300);
-    }
+    setTimeout(() => {
+      dispatch(SetCountUp(count));
+    }, 300);
   };
 
   function getResult() {
@@ -77,7 +74,6 @@ function Index({ handleEndClick }) {
       countQuestionWrong: countQuestionWrong,
     };
     dispatch(SetResult(result));
-    // setResult(result);
   }
 
   const handleQuestionSubmit = (e) => {
@@ -107,6 +103,9 @@ function Index({ handleEndClick }) {
     dispatch(SetFlagStopTime(false));
     dispatch(SetOpenModalResult(false));
     dispatch(SetResult(null));
+    dispatch(SetLoading(true));
+    dispatch(SetCountIndex(0));
+    dispatch(SetSelectQuestionNull([]));
     handleEndClick(true);
     fetchQuestion();
   };
@@ -151,38 +150,15 @@ function Index({ handleEndClick }) {
   };
 
   const prevQuestion = () => {
-    if (count > 0) setCount((count) => count - 1);
+    dispatch(SetCountDown(count));
   };
 
   const nextQuestion = () => {
-    if (count < dataQuestion.length - 1) {
-      setCount((count) => count + 1);
-    }
+    dispatch(SetCountUp(count));
   };
 
   const handleSelectQuestionClick = (index) => {
-    setCount(index);
-  };
-
-  const formatTime = (sec) => {
-    var hours = Math.floor(sec / 3600);
-    hours >= 1 ? (sec = sec - hours * 3600) : (hours = "00");
-    var min = Math.floor(sec / 60);
-    min >= 1 ? (sec = sec - min * 60) : (min = "00");
-    sec < 1 ? (sec = "00") : void 0;
-    min.toString().length === 1 ? (min = "0" + min) : void 0;
-    sec.toString().length === 1 ? (sec = "0" + sec) : void 0;
-    return hours + ":" + min + ":" + sec;
-  };
-
-  let listContext = {
-    dataQuestion: dataQuestion,
-    selectQuestion: selectQuestion,
-    count: count,
-    formatTime: formatTime,
-    // getTimeOut: getTimeOut,
-    // timeOut: timeOut,
-    // result: result,
+    dispatch(SetCountIndex(index));
   };
 
   if (isLoading) {
@@ -196,44 +172,39 @@ function Index({ handleEndClick }) {
       <div className="body-question">
         <DetailQuestion />
 
-        <contextBodyQuestion.Provider value={listContext}>
-          <div className="body-question__list">
-            <form
-              className="body-question__form"
-              onSubmit={handleQuestionSubmit}
-            >
-              {dataQuestion.map(
-                (item, index) =>
-                  index === count && (
-                    <QuestionItems
-                      handleGetAnswerChange={handleGetAnswerChange}
-                      key={item.id}
-                      itemQuestion={item}
-                    />
-                  )
-              )}
-
-              <ControllerQuestion
-                prevQuestion={prevQuestion}
-                nextQuestion={nextQuestion}
-                handleSelectQuestionClick={handleSelectQuestionClick}
-              />
-            </form>
-
-            <DialogWarning
-              handleCloseWarning={handleCloseWarning}
-              handleWarningBoxSubmit={handleWarningBoxSubmit}
-              warning={warning}
-            />
-
-            {openModal && (
-              <DialogResult
-                openModal={openModal}
-                closeResultModalClick={closeResultModalClick}
-              />
+        <div className="body-question__list">
+          <form className="body-question__form" onSubmit={handleQuestionSubmit}>
+            {dataQuestion.map(
+              (item, index) =>
+                index === count && (
+                  <QuestionItems
+                    handleGetAnswerChange={handleGetAnswerChange}
+                    key={`body${item.id}`}
+                    itemQuestion={item}
+                  />
+                )
             )}
-          </div>
-        </contextBodyQuestion.Provider>
+
+            <ControllerQuestion
+              prevQuestion={prevQuestion}
+              nextQuestion={nextQuestion}
+              handleSelectQuestionClick={handleSelectQuestionClick}
+            />
+          </form>
+
+          <DialogWarning
+            handleCloseWarning={handleCloseWarning}
+            handleWarningBoxSubmit={handleWarningBoxSubmit}
+            warning={warning}
+          />
+
+          {openModal && (
+            <DialogResult
+              openModal={openModal}
+              closeResultModalClick={closeResultModalClick}
+            />
+          )}
+        </div>
       </div>
     );
   }

@@ -1,27 +1,29 @@
-import React, { useContext } from "react";
-
-import { contextBodyQuestion } from "./BodyQuestion";
-
-
+import Box from "@material-ui/core/Box";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Box from "@material-ui/core/Box";
-
+import React from "react";
+import { useSelector } from "react-redux";
 
 function QuestionItems({ itemQuestion, handleGetAnswerChange }) {
-  const context = useContext(contextBodyQuestion);
+  const selectQuestion = useSelector((state) => state.question.selectQuestion);
 
-  const activeAnswer = context.selectQuestion.map((e) => e.answer_id);
+  const activeAnswer = selectQuestion.map((e) => e.answer_id);
   return (
     <div className="body-question__items">
       <h3 className="name">{itemQuestion.name}</h3>
       <p className="content">{itemQuestion.content}</p>
-      {itemQuestion.answers.map((i) => (
-        <Box key={i.answer_id} style={{border: "1px solid #e2e2e2",
-          paddingLeft: "10px", marginBottom: "5px"}}>
-          <FormControl  fullWidth>
+      {itemQuestion.answers?.map((i) => (
+        <Box
+          key={i.answer_id}
+          style={{
+            border: "1px solid #e2e2e2",
+            paddingLeft: "10px",
+            marginBottom: "5px",
+          }}
+        >
+          <FormControl fullWidth>
             <RadioGroup
               aria-label={i.content_answer}
               onChange={() => handleGetAnswerChange(i)}
@@ -34,7 +36,7 @@ function QuestionItems({ itemQuestion, handleGetAnswerChange }) {
                 label={i.content_answer}
               />
             </RadioGroup>
-            </FormControl>
+          </FormControl>
         </Box>
       ))}
     </div>

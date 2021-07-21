@@ -2,14 +2,16 @@ import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import clsx from "clsx";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { useButtonStyles } from "../../../common/ButtonStyle";
 import Oclock from "../../../common/Oclock";
-import { contextBodyQuestion } from "./BodyQuestion";
 
 function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
   const classes = useButtonStyles();
-  const context = useContext(contextBodyQuestion);
+  const dataQuestion = useSelector((state) => state.question.dataQuestion);
+  const count = useSelector((state) => state.question.count);
+  const selectQuestion = useSelector((state) => state.question.selectQuestion);
 
   const [openListQuestion, setOpenListQuestion] = useState(false);
 
@@ -29,7 +31,7 @@ function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
     }
   }
 
-  const activeQuestion = context.selectQuestion.map((e) => e.parent_id);
+  const activeQuestion = selectQuestion?.map((e) => e.parent_id);
   return (
     <div className="controlle">
       <div className="controlle-question">
@@ -41,9 +43,9 @@ function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
           >
             Nộp bài
           </Button>
-          {context.dataQuestion.map(
+          {dataQuestion.map(
             (item, index) =>
-              index === context.count && (
+              index === count && (
                 <FormControlLabel
                   label="Xem Lại"
                   key={`input${item.id}`}
@@ -63,7 +65,7 @@ function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
         </div>
         <div>
           <Button
-            disabled={context.count === 0 ? true : false}
+            disabled={count === 0 ? true : false}
             type="button"
             className={clsx(
               classes.button,
@@ -76,9 +78,7 @@ function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
           </Button>
 
           <Button
-            disabled={
-              context.count < context.dataQuestion.length - 1 ? false : true
-            }
+            disabled={count < dataQuestion.length - 1 ? false : true}
             type="button"
             className={clsx(
               classes.button,
@@ -106,11 +106,11 @@ function Index({ prevQuestion, nextQuestion, handleSelectQuestionClick }) {
 
       {openListQuestion && (
         <ul className="list-question">
-          {context.dataQuestion.map((item, index) => (
+          {dataQuestion.map((item, index) => (
             <li
               id={activeQuestion.includes(item.id) ? "select" : null}
               className={selectChecked.includes(item.id) ? "checked" : null}
-              key={item.id}
+              key={`ss${item.id}`}
               onClick={() => handleSelectQuestionClick(index)}
             >
               {index + 1}

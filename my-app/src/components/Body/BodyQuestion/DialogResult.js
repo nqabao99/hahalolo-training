@@ -1,11 +1,10 @@
-import React, { useContext } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
+import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
 import clsx from "clsx";
-import { contextBodyQuestion } from "./BodyQuestion";
+import React from "react";
 import { useSelector } from "react-redux";
 
 const useStyleDialog = makeStyles(() => ({
@@ -45,11 +44,23 @@ const useStyleDialog = makeStyles(() => ({
   },
 }));
 
+const formatTime = (sec) => {
+  var hours = Math.floor(sec / 3600);
+  hours >= 1 ? (sec = sec - hours * 3600) : (hours = "00");
+  var min = Math.floor(sec / 60);
+  min >= 1 ? (sec = sec - min * 60) : (min = "00");
+  sec < 1 ? (sec = "00") : void 0;
+  min.toString().length === 1 ? (min = "0" + min) : void 0;
+  sec.toString().length === 1 ? (sec = "0" + sec) : void 0;
+  return hours + ":" + min + ":" + sec;
+};
+
 export default function CustomizedDialogs({ closeResultModalClick }) {
   const classes = useStyleDialog();
-  const context = useContext(contextBodyQuestion);
   const timeOut = useSelector((state) => state.question.timeOut);
   const result = useSelector((state) => state.question.result);
+  const dataQuestion = useSelector((state) => state.question.dataQuestion);
+  const selectQuestion = useSelector((state) => state.question.selectQuestion);
 
   return (
     <Dialog open={true}>
@@ -64,7 +75,7 @@ export default function CustomizedDialogs({ closeResultModalClick }) {
 
       <Box className={classes.containerStatistical}>
         <Typography className={classes.textStatistical} component="p">
-          Thời gian: {context.formatTime(600 - timeOut).slice(-5)}
+          Thời gian: {formatTime(600 - timeOut).slice(-5)}
         </Typography>
         <Typography className={classes.textStatistical} component="p">
           Điểm số: {result.scores}
@@ -82,7 +93,7 @@ export default function CustomizedDialogs({ closeResultModalClick }) {
           Đáp án của bạn
         </Typography>
         <Box className={classes.tableResult}>
-          {context.selectQuestion.map((item) => (
+          {selectQuestion.map((item) => (
             <Typography
               component="span"
               key={item.answer_id}
@@ -107,7 +118,7 @@ export default function CustomizedDialogs({ closeResultModalClick }) {
           Đáp án đúng
         </Typography>
         <Box className={classes.tableResult}>
-          {context.dataQuestion.map((item, index) => (
+          {dataQuestion.map((item, index) => (
             <Typography
               component="span"
               className={classes.itemTableResult}
