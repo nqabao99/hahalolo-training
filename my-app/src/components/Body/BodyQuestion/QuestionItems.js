@@ -4,17 +4,18 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import React from "react";
-import { useSelector } from "react-redux";
 
-function QuestionItems({ itemQuestion, handleGetAnswerChange }) {
-  const selectQuestion = useSelector((state) => state.question.selectQuestion);
-
+function QuestionItems({
+  itemQuestion,
+  handleGetAnswerChange,
+  selectQuestion,
+}) {
   const activeAnswer = selectQuestion.map((e) => e.answer_id);
   return (
     <div className="body-question__items">
       <h3 className="name">{itemQuestion.name}</h3>
       <p className="content">{itemQuestion.content}</p>
-      {itemQuestion.answers?.map((i) => (
+      {itemQuestion.answers.map((i) => (
         <Box
           key={i.answer_id}
           style={{

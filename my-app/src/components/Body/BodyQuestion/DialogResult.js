@@ -1,11 +1,11 @@
-import Box from "@material-ui/core/Box";
+import React, { useContext } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 import clsx from "clsx";
-import React from "react";
-import { useSelector } from "react-redux";
+import { contextBodyQuestion } from "./BodyQuestion";
 
 const useStyleDialog = makeStyles(() => ({
   titleRusult: {
@@ -55,12 +55,14 @@ const formatTime = (sec) => {
   return hours + ":" + min + ":" + sec;
 };
 
-export default function CustomizedDialogs({ closeResultModalClick }) {
+export default function CustomizedDialogs({
+  closeResultModalClick,
+  listQuestion,
+  selectQuestion,
+  timeOut,
+}) {
   const classes = useStyleDialog();
-  const timeOut = useSelector((state) => state.question.timeOut);
-  const result = useSelector((state) => state.question.result);
-  const dataQuestion = useSelector((state) => state.question.dataQuestion);
-  const selectQuestion = useSelector((state) => state.question.selectQuestion);
+  const context = useContext(contextBodyQuestion);
 
   return (
     <Dialog open={true}>
@@ -75,16 +77,16 @@ export default function CustomizedDialogs({ closeResultModalClick }) {
 
       <Box className={classes.containerStatistical}>
         <Typography className={classes.textStatistical} component="p">
-          Thời gian: {formatTime(600 - timeOut).slice(-5)}
+          Thời gian: {formatTime(600 - timeOut)}
         </Typography>
         <Typography className={classes.textStatistical} component="p">
-          Điểm số: {result.scores}
+          Điểm số: {context.result.scores}
         </Typography>
         <Typography className={classes.textStatistical} component="p">
-          Số câu đúng: {result.countQuestionCorrect}
+          Số câu đúng: {context.result.countQuestionCorrect}
         </Typography>
         <Typography className={classes.textStatistical} component="p">
-          Số câu sai: {result.countQuestionWrong}
+          Số câu sai: {context.result.countQuestionWrong}
         </Typography>
       </Box>
 
@@ -118,7 +120,7 @@ export default function CustomizedDialogs({ closeResultModalClick }) {
           Đáp án đúng
         </Typography>
         <Box className={classes.tableResult}>
-          {dataQuestion.map((item, index) => (
+          {listQuestion.map((item, index) => (
             <Typography
               component="span"
               className={classes.itemTableResult}

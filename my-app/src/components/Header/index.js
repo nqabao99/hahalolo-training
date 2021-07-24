@@ -1,20 +1,17 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import logo from "../../assets/img/logo.png";
 import Image from "../../common/Image";
 import "./header-style.scss";
-import { contextApp } from "../../App";
-import MenuItem from "./MenuItem";
 
-function Header() {
-  const context = useContext(contextApp);
+function Header({ triggerGetAccount }) {
   let history = useHistory();
   const user = JSON.parse(localStorage.getItem("user-info"));
 
   const handleLogoutClick = () => {
-    context.handleReset("logout");
-    localStorage.removeItem("user-info");
+    triggerGetAccount();
     history.push("/login");
+    localStorage.removeItem("user-info");
   };
 
   return (
@@ -28,13 +25,27 @@ function Header() {
           </div>
           <div className="header-navmenu">
             <ul className="header-navmenu__list">
-              <MenuItem text="thi thptqg" />
-              <MenuItem text="đề thi kiểm tra" />
-              <MenuItem text="english test" />
-              <MenuItem text="it test" />
-              <MenuItem text="đại học" />
-              <MenuItem text="hướng nghiệp" />
-              <MenuItem text="tài liệu" />
+              <li className="header-navmenu__items">
+                <a href="#/">thi thptqg</a>
+              </li>
+              <li className="header-navmenu__items">
+                <a href="#/">đề thi kiểm tra</a>
+              </li>
+              <li className="header-navmenu__items">
+                <a href="#/">english test</a>
+              </li>
+              <li className="header-navmenu__items">
+                <a href="#/">it test</a>
+              </li>
+              <li className="header-navmenu__items">
+                <a href="#/">đại học</a>
+              </li>
+              <li className="header-navmenu__items">
+                <a href="#/"> hương nghiệp</a>
+              </li>
+              <li className="header-navmenu__items">
+                <a href="#/">tài liệu</a>
+              </li>
             </ul>
           </div>
           <div className="header-login">

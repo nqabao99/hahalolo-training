@@ -4,7 +4,6 @@ import Dialog from "@material-ui/core/Dialog";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import { useSelector } from "react-redux";
 
 const useStyleDialog = makeStyles(() => ({
   containerDialog: {
@@ -23,17 +22,16 @@ export default function CustomizedDialogs({
   warning,
   handleCloseWarning,
   handleWarningBoxSubmit,
+  listQuestion,
+  selectQuestion,
 }) {
   const classes = useStyleDialog();
-
-  const dataQuestion = useSelector((state) => state.question.dataQuestion);
-  const selectQuestion = useSelector((state) => state.question.selectQuestion);
 
   return (
     <Dialog onClose={handleCloseWarning} open={warning}>
       <Box className={classes.containerDialog}>
         <Typography component="h5" variant="h5" align="center">
-          Bạn còn {dataQuestion.length - selectQuestion.length} câu chưa trả lời
+          Bạn còn {listQuestion.length - selectQuestion.length} câu chưa trả lời
         </Typography>
         <Typography className={classes.mg} align="center" component="p">
           Bạn đồng ý nộp chứ?

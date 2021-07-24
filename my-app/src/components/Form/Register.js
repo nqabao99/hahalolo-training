@@ -1,15 +1,23 @@
-import React, { useContext, useState } from "react";
-import { useForm } from "react-hook-form";
-import { contextApp } from "../../App";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import { useHistory } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useFormStyle } from "./FormStyle";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import Container from "@material-ui/core/Container";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import PropTypes from "prop-types";
+import React, { memo, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { compose } from "redux";
+import { createStructuredSelector } from "reselect";
+import * as yup from "yup";
+import { regesterAccount, setIsSuccess } from "../../redux/actions/account";
+import {
+  makeSelectListAccount,
+  makeSelectStatusFlags,
+} from "../../redux/selectors/account";
+import { useFormStyle } from "./FormStyle";
 
 const schema = yup.object().shape({
   firstName: yup
@@ -33,12 +41,12 @@ const schema = yup.object().shape({
     .max(30, "Mật khẩu phải từ 3-30 ký tự"),
 });
 
-function Register() {
+function Register(props) {
+  const { triggerRegisterAccount, triggerResetIsSuccess, listAccount, status } =
+    props;
   const classes = useFormStyle();
   let history = useHistory();
   const [message, setMessage] = useState(false);
-
-  const context = useContext(contextApp);
 
   const {
     register,
@@ -50,29 +58,23 @@ function Register() {
     let ramdomID = Math.random().toString(36).substring(7);
     data.id = ramdomID;
 
-    const check = context.listAccount.some(
-      (item) => item.account === data.account
-    );
+    const check = listAccount.some((item) => item.account === data.account);
     if (!check) {
       e.target.reset();
-      setMessage(false);
-
-      let result = await fetch("http://localhost:3000/accounts", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
-      result = await result.json();
-      localStorage.setItem("user-info", JSON.stringify(result));
-      context.handleReset("register");
-      history.push("/");
+      triggerRegisterAccount(data);
     } else {
       setMessage(true);
     }
   }
+
+  useEffect(() => {
+    if (status.isSuccess) {
+      setMessage(false);
+      history.push("/");
+      triggerResetIsSuccess();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status.isSuccess]);
 
   return (
     <Container className={classes.wrapperLogin} maxWidth="sm">
@@ -101,7 +103,7 @@ function Register() {
 
         <Box className={classes.margin}>
           <TextField
-            error={errors.firstName&& true}
+            error={errors.firstName && true}
             // helperText={errors.firstName && errors.firstName?.message}
             type="text"
             label="Họ"
@@ -116,7 +118,7 @@ function Register() {
         </Box>
         <Box>
           <TextField
-            error={errors.lastName&& true}
+            error={errors.lastName && true}
             // helperText={errors.lastName && errors.lastName?.message}
             type="text"
             label="Tên"
@@ -155,7 +157,7 @@ function Register() {
 
         <Box>
           <TextField
-            error={errors.password&& true}
+            error={errors.password && true}
             // helperText={errors.password && errors.password?.message}
             type="password"
             label="Mật khẩu"
@@ -184,4 +186,27 @@ function Register() {
   );
 }
 
-export default Register;
+Register.propTypes = {
+  triggerRegisterAccount: PropTypes.func,
+  triggerResetIsSuccess: PropTypes.func,
+  listAccount: PropTypes.array,
+  status: PropTypes.object,
+};
+
+const mapStateToProps = createStructuredSelector({
+  listAccount: makeSelectListAccount(),
+  status: makeSelectStatusFlags(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    triggerRegisterAccount: (infoAccount) =>
+      dispatch(regesterAccount(infoAccount)),
+
+    triggerResetIsSuccess: () => dispatch(setIsSuccess()),
+  };
+}
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
+
+export default compose(withConnect, memo)(Register);

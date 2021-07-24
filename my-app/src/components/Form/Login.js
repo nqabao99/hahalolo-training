@@ -1,18 +1,21 @@
-import React, { useContext } from "react";
-import { useForm } from "react-hook-form";
-import { Link, useHistory } from "react-router-dom";
-import { contextApp } from "../../App";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import TextField from "@material-ui/core/TextField";
+import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
 import LinkMUI from "@material-ui/core/Link";
-
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import PropTypes from "prop-types";
+import React, { memo } from "react";
+import { useForm } from "react-hook-form";
+import { connect } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { compose } from "redux";
+import { createStructuredSelector } from "reselect";
+import * as yup from "yup";
+import { getAccount } from "../../redux/actions/account";
+import { makeSelectListAccount } from "../../redux/selectors/account";
 import { useFormStyle } from "./FormStyle";
-
 const schema = yup.object().shape({
   account: yup
     .string()
@@ -25,10 +28,11 @@ const schema = yup.object().shape({
     .max(30, "Mật khẩu phải từ 3-30 ký tự"),
 });
 
-function Login() {
+function Login(props) {
+  const { listAccount, triggerGetAccount } = props;
+
   const classes = useFormStyle();
   let history = useHistory();
-  const context = useContext(contextApp);
 
   const {
     register,
@@ -36,15 +40,15 @@ function Login() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
   const onHandleSubmit = (data) => {
-    if (context.listAccount) {
-      let check = context.listAccount.find(
+    if (listAccount) {
+      let check = listAccount.find(
         (item) =>
           item.account === data.account && item.password === data.password
       );
 
       if (check) {
         localStorage.setItem("user-info", JSON.stringify(check));
-        context.handleReset("login");
+        triggerGetAccount(check);
         history.push("/");
       } else {
         alert("Sai ten tai khoan hoac mat khau");
@@ -78,7 +82,7 @@ function Login() {
 
         <Box className={classes.margin}>
           <TextField
-            error={errors.account&& true}
+            error={errors.account && true}
             // helperText={errors.account && errors.account?.message}
             label="Nhập Email"
             fullWidth
@@ -92,7 +96,7 @@ function Login() {
         </Box>
         <Box>
           <TextField
-            error={errors.password&& true}
+            error={errors.password && true}
             // helperText={errors.password && errors.password?.message}
             type="password"
             label="Nhập mật khẩu"
@@ -119,11 +123,31 @@ function Login() {
         </Button>
 
         <Typography className={classes.margin} component="p" align="right">
-          Nếu bạn chưa có tài khoản?<Link className={classes.a} to="/register"> Đăng ký ngay</Link>
+          Nếu bạn chưa có tài khoản?
+          <Link className={classes.a} to="/register">
+            {" "}
+            Đăng ký ngay
+          </Link>
         </Typography>
       </form>
     </Container>
   );
 }
 
-export default Login;
+Login.propTypes = {
+  listAccount: PropTypes.array,
+  triggerGetAccount: PropTypes.func,
+};
+
+const mapStateToProps = createStructuredSelector({
+  listAccount: makeSelectListAccount(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    triggerGetAccount: (account) => dispatch(getAccount(account)),
+  };
+}
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
+
+export default compose(withConnect, memo)(Login);

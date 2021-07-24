@@ -56,7 +56,7 @@
       }
     }
     &__form {
-      label {
+      label{
         margin-right: 0;
       }
     }
@@ -76,7 +76,7 @@
       .MuiIconButton-label,
       .MuiCheckbox-colorSecondary.Mui-checked {
         color: #ffb83c;
-      }
+    }
       p,
       label {
         color: #fff;
@@ -86,13 +86,14 @@
         user-select: none;
       }
     }
+   
   }
 
   #select {
     background-color: rgb(157, 213, 251);
   }
 
-  .oclock {
+  .oclock{
     margin-left: 10px !important;
   }
 
@@ -119,3 +120,5 @@
     }
   }
 }
+
+

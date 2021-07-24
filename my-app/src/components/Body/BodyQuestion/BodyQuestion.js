@@ -1,66 +1,54 @@
-import axios from "axios";
-import React, { useContext, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  SetCountDown,
-  SetCountIndex,
-  SetCountUp,
-  SetDataQuestion,
-  SetFlagStopTime,
-  SetLoading,
-  SetOpenModalResult,
-  SetOpenModalWarning,
-  SetResult,
-  SetSelectQuestion,
-  SetSelectQuestionNull,
-} from "../../../actions/Question";
-import { contextApp } from "../../../App";
-import ControllerQuestion from "./ControlleQuestion";
+import React, { createContext, useEffect, useState } from "react";
+import ControllerQuestion from "./ControlleQuestion/ControlleQuestion";
 import DetailQuestion from "./DetailQuestion";
 import DialogResult from "./DialogResult";
 import DialogWarning from "./DialogWarning";
 import Spinner from "./Loading/Loading";
 import QuestionItems from "./QuestionItems";
 
-function Index({ handleEndClick }) {
-  const contextapp = useContext(contextApp);
+export const contextBodyQuestion = createContext();
 
-  const sleep = (ms) => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  };
+function BodyQuestion(props) {
+  const {
+    handleEndClick,
+    triggerUpdateListResult,
+    listResult,
+    triggerAddResult,
+    triggerGetListQuestion,
+    listQuestion,
+    StatusFlags,
+    selectQuestion,
+    addSelectQuestion,
+    reSetSelectQuestion,
+    stopTime,
+    resetStopTime,
+    timeOut,
+  } = props;
 
   useEffect(() => {
-    const fetchQuestion = async () => {
-      await sleep(1000);
-      const responseJson = await fetch("http://localhost:3000/question");
-      const response = await responseJson.json();
-      dispatch(SetDataQuestion(response));
-      dispatch(SetLoading(false));
-    };
-    fetchQuestion();
+    triggerGetListQuestion();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const openModal = useSelector((state) => state.question.openModalResult);
-  const warning = useSelector((state) => state.question.openModalWarning);
-  const timeOut = useSelector((state) => state.question.timeOut);
-  const result = useSelector((state) => state.question.result);
-  const dataQuestion = useSelector((state) => state.question.dataQuestion);
-  const count = useSelector((state) => state.question.count);
-  const isLoading = useSelector((state) => state.question.loading);
-  const selectQuestion = useSelector((state) => state.question.selectQuestion);
-  const dispatch = useDispatch();
+  const [count, setCount] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
+  const [warning, setWarning] = useState(false);
+
+  const [result, setResult] = useState();
 
   const handleGetAnswerChange = (data) => {
-    dispatch(SetSelectQuestion(data));
+    addSelectQuestion(data);
 
-    setTimeout(() => {
-      dispatch(SetCountUp(count));
-    }, 300);
+    if (count < listQuestion.length - 1) {
+      setTimeout(() => {
+        setCount((count) => count + 1);
+      }, 300);
+    }
   };
 
   function getResult() {
     let result;
-    let sumQuestion = dataQuestion.length;
+    let sumQuestion = listQuestion.length;
     let countQuestionCorrect = 0;
     let countQuestionWrong = 0;
     selectQuestion.map((i) =>
@@ -73,44 +61,42 @@ function Index({ handleEndClick }) {
       countQuestionCorrect: countQuestionCorrect,
       countQuestionWrong: countQuestionWrong,
     };
-    dispatch(SetResult(result));
+    setResult(result);
   }
 
   const handleQuestionSubmit = (e) => {
     e.preventDefault();
     if (selectQuestion.length < 10) {
-      dispatch(SetOpenModalWarning(true));
+      setWarning(true);
     } else {
-      dispatch(SetFlagStopTime(true));
-      dispatch(SetOpenModalResult(true));
+      setOpenModal(true);
+      stopTime();
       getResult();
     }
   };
 
   const handleWarningBoxSubmit = () => {
-    dispatch(SetFlagStopTime(true));
-    dispatch(SetOpenModalResult(true));
-    dispatch(SetOpenModalWarning(false));
+    setOpenModal(true);
+    stopTime();
+    setWarning(false);
     getResult();
   };
 
   const handleCloseWarning = () => {
-    dispatch(SetOpenModalWarning(false));
+    setWarning(false);
   };
 
   //Xong
   const closeResultModalClick = () => {
-    dispatch(SetFlagStopTime(false));
-    dispatch(SetOpenModalResult(false));
-    dispatch(SetResult(null));
-    dispatch(SetLoading(true));
-    dispatch(SetCountIndex(0));
-    dispatch(SetSelectQuestionNull([]));
+    setOpenModal(false);
     handleEndClick(true);
-    fetchQuestion();
+    updateListResult();
+    setOpenModal(false);
+    reSetSelectQuestion([]);
+    resetStopTime();
   };
 
-  const fetchQuestion = async () => {
+  const updateListResult = async () => {
     let ramdomID = Math.random().toString(36).substring(7);
     const user = JSON.parse(localStorage.getItem("user-info"));
     let data = {
@@ -122,14 +108,15 @@ function Index({ handleEndClick }) {
       scores: result.scores,
     };
 
-    let check = contextapp.listResult.find((item) => item.id_user === user.id);
+    let check = listResult.find((item) => item.id_user === user.id);
 
-    async function updateListResult() {
+    function updateListResult() {
       let data1 = {
         scores: data.scores,
         timeOut: data.timeOut,
       };
-      axios.patch(`http://localhost:3000/listResult/${check.id}`, data1);
+
+      triggerUpdateListResult(check.id, data1);
     }
 
     if (check) {
@@ -143,25 +130,41 @@ function Index({ handleEndClick }) {
         }
       }
     } else {
-      axios.post("http://localhost:3000/listResult", data);
+      triggerAddResult(data);
     }
-
-    contextapp.handleListResult(ramdomID);
   };
 
   const prevQuestion = () => {
-    dispatch(SetCountDown(count));
+    if (count > 0) setCount((count) => count - 1);
   };
 
   const nextQuestion = () => {
-    dispatch(SetCountUp(count));
+    if (count < listQuestion.length - 1) {
+      setCount((count) => count + 1);
+    }
   };
 
   const handleSelectQuestionClick = (index) => {
-    dispatch(SetCountIndex(index));
+    setCount(index);
   };
 
-  if (isLoading) {
+  const formatTime = (sec) => {
+    var hours = Math.floor(sec / 3600);
+    hours >= 1 ? (sec = sec - hours * 3600) : (hours = "00");
+    var min = Math.floor(sec / 60);
+    min >= 1 ? (sec = sec - min * 60) : (min = "00");
+    sec < 1 ? (sec = "00") : void 0;
+    min.toString().length === 1 ? (min = "0" + min) : void 0;
+    sec.toString().length === 1 ? (sec = "0" + sec) : void 0;
+    return hours + ":" + min + ":" + sec;
+  };
+
+  let listContext = {
+    formatTime: formatTime,
+    result: result,
+  };
+
+  if (StatusFlags.isLoading) {
     return (
       <div className="body-question">
         <Spinner />
@@ -172,42 +175,56 @@ function Index({ handleEndClick }) {
       <div className="body-question">
         <DetailQuestion />
 
-        <div className="body-question__list">
-          <form className="body-question__form" onSubmit={handleQuestionSubmit}>
-            {dataQuestion.map(
-              (item, index) =>
-                index === count && (
-                  <QuestionItems
-                    handleGetAnswerChange={handleGetAnswerChange}
-                    key={`body${item.id}`}
-                    itemQuestion={item}
-                  />
-                )
+        <contextBodyQuestion.Provider value={listContext}>
+          <div className="body-question__list">
+            <form
+              className="body-question__form"
+              onSubmit={handleQuestionSubmit}
+            >
+              {listQuestion.map(
+                (item, index) =>
+                  index === count && (
+                    <QuestionItems
+                      handleGetAnswerChange={handleGetAnswerChange}
+                      key={item.id}
+                      itemQuestion={item}
+                      selectQuestion={selectQuestion}
+                    />
+                  )
+              )}
+
+              <ControllerQuestion
+                prevQuestion={prevQuestion}
+                nextQuestion={nextQuestion}
+                handleSelectQuestionClick={handleSelectQuestionClick}
+                listQuestion={listQuestion}
+                selectQuestion={selectQuestion}
+                count={count}
+              />
+            </form>
+
+            <DialogWarning
+              handleCloseWarning={handleCloseWarning}
+              handleWarningBoxSubmit={handleWarningBoxSubmit}
+              listQuestion={listQuestion}
+              warning={warning}
+              selectQuestion={selectQuestion}
+            />
+
+            {openModal && (
+              <DialogResult
+                openModal={openModal}
+                closeResultModalClick={closeResultModalClick}
+                listQuestion={listQuestion}
+                selectQuestion={selectQuestion}
+                timeOut={timeOut}
+              />
             )}
-
-            <ControllerQuestion
-              prevQuestion={prevQuestion}
-              nextQuestion={nextQuestion}
-              handleSelectQuestionClick={handleSelectQuestionClick}
-            />
-          </form>
-
-          <DialogWarning
-            handleCloseWarning={handleCloseWarning}
-            handleWarningBoxSubmit={handleWarningBoxSubmit}
-            warning={warning}
-          />
-
-          {openModal && (
-            <DialogResult
-              openModal={openModal}
-              closeResultModalClick={closeResultModalClick}
-            />
-          )}
-        </div>
+          </div>
+        </contextBodyQuestion.Provider>
       </div>
     );
   }
 }
 
-export default Index;
+export default BodyQuestion;
